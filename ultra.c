@@ -202,14 +202,17 @@ void UltrasonicWave_StartMeasure(void)
 /***** Ranging *****/
 float UltrasonicWave_Measure(void) //
 {
+  uint32_t bef, aft;
   while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10)==1);//When echo is high, wait to low level before starting ultrasound
   UltrasonicWave_StartMeasure(); //Start ultrasound    
   while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 0);//Waiting for the high level of echo    
   TIM_SetCounter(TIM2,0); //Clear counter
   TIM_Cmd(TIM2, ENABLE); //Enable timer 2, start counting
+  bef = TIM_GetCounter(TIM2);
   while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10) == 1);//Wait for the high level of echo to end
+  aft = TIM_GetCounter(TIM2);
   TIM_Cmd(TIM2, DISABLE);    //Disable timer 2, cut off count    
-  return (TIM_GetCounter(TIM2))/1000000*340/2 *100;    //Here the unit is converted to cm
+  return (aft - bef);///1000000*340/2 *100;    //Here the unit is converted to cm
 }
 
 
@@ -235,8 +238,9 @@ int main(void)
 
     while (1){
       distance = UltrasonicWave_Measure();
-      Delay_us(60000);
       printf("distance:%5.2f\n",distance);
+      Delay_us(60);
+      
       
     }
 }
