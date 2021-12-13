@@ -56,7 +56,8 @@ void setup()
     // Set the protocol version
     // Get methods and members of Protocol1PacketHandler or Protocol2PacketHandler
     dynamixel::PacketHandler *packetHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
-
+    int dxl_comm_result = COMM_TX_FAIL;
+    uint8_t dxl_error = 0;
     // Open port
     if (portHandler->openPort())
     {
@@ -78,11 +79,128 @@ void setup()
         Serial.print("Failed to change the baudrate!\n");
         return;
     }
+
+    // Torque Enable
+    for (int i = 1; i < TotalMotors + 1; i++)
+    {
+        dxl_comm_result = packetHandler->write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE, &dxl_error);
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+        else
+        {
+            Serial.print("Dynamixel has been successfully connected \n");
+        }
+    }
+
+    while (1)
+    {
+        Serial.print("Press any key to continue! (or press q to quit!)\n");
+        if (getch() == 'q')
+            break;
+
+        // Init Start Position
+        for (int i = 1; i < TotalMotors + 1; i++)
+        {
+            switch (i % 3)
+            {
+            case 1:
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosCoxa, &dxl_error);
+                if (dxl_comm_result != COMM_SUCCESS)
+                {
+                    Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+                }
+                else if (dxl_error != 0)
+                {
+                    Serial.print(packetHandler->getRxPacketError(dxl_error));
+                }
+                break;
+
+            case 2:
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosFemur, &dxl_error);
+                if (dxl_comm_result != COMM_SUCCESS)
+                {
+                    Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+                }
+                else if (dxl_error != 0)
+                {
+                    Serial.print(packetHandler->getRxPacketError(dxl_error));
+                }
+                break;
+
+            case 3:
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosTibia, &dxl_error);
+                if (dxl_comm_result != COMM_SUCCESS)
+                {
+                    Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+                }
+                else if (dxl_error != 0)
+                {
+                    Serial.print(packetHandler->getRxPacketError(dxl_error));
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        // usart command input
+
+        // command do
+        switch (command)
+        {
+        case 0:
+            // stop
+            break;
+        case 1: // foward walking
+
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    // Torque disable
+    for (int i = 1; i < TotalMotors + 1; i++)
+    {
+        dxl_comm_result = packetHandler->write1ByteTxRx(portHandler, i, 30, TORQUE_DISABLE, &dxl_error);
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+    }
+
+    // Close port
+    portHandler->closePort();
 }
 
-void loop(void)
-{
-    Serial.print("Press any key to continue! (or press q to quit!)\n");
-    if (getch() == 'q')
-        break;
-}
+// void InitLegs(void)
+// {
+//     for (int i = 1; i < TotalMotors + 1; i++)
+//     {
+//         dxl_comm_result = packetHandler->write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE, &dxl_error);
+//         if (dxl_comm_result != COMM_SUCCESS)
+//         {
+//             Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+//         }
+//         else if (dxl_error != 0)
+//         {
+//             Serial.print(packetHandler->getRxPacketError(dxl_error));
+//         }
+//         else
+//         {
+//             Serial.print("Dynamixel has been successfully connected \n");
+//         }
+//     }
+// }
