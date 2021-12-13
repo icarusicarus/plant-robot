@@ -1,18 +1,43 @@
+#include <stdio.h>
 #include "stm32f10x.h"
 #include "stm32f10x_exti.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_usart.h"
 #include "stm32f10x_rcc.h"
-#include "DHT11.h"
+#include "stm32f10x_tim.h"
+#include "string.h"
+#include "stm32f10x_adc.h"
+#include "stm32f10x_dma.h"
 #include "misc.h"
+#include "math.h"
 
-#define DHT11_DATA_GPIO_Port    GPIOA
-#define DHT11_DATA_Pin          GPIO_Pin_14
+//#ifndef DHT11_H
+#define DHT11_H
 
-DHT11DATA dht11_data;
+#define DHT11_SUCCESS         1
+#define DHT11_ERROR_CHECKSUM  2
+#define DHT11_ERROR_TIMEOUT   3
+
+int a = 1;
+int b = 2;
+int c = 3;
+char buff[32];
+
+typedef struct DHT11_Dev {
+	uint8_t temparature;
+	uint8_t humidity;
+	GPIO_TypeDef* port;
+	uint16_t pin;
+} DHT11_Dev;
+
+int DHT11_init(struct DHT11_Dev* dev, GPIO_TypeDef* port, uint16_t pin);
+int DHT11_read(struct DHT11_Dev* dev);
+
+struct DHT11_Dev dev;
+int res;
+int i;
 
 volatile uint32_t ADC_Value[1];
-uint32_t light;
 
 /* function prototype */
 void RCC_Configure(void);
@@ -22,6 +47,9 @@ void Init_USART(void);
 void NVIC_Configure(void);
 
 void EXTI15_10_IRQHandler(void);
+
+void sendDataUART1(uint16_t data);
+void sendDataUART2(uint16_t data);
 
 void Delay(void);
 
@@ -53,6 +81,10 @@ void RCC_Configure(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+    
+    // dht11
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
 }
 
@@ -259,8 +291,219 @@ float UltrasonicWave_Measure(void) //
   return (aft - bef);///1000000*340/2 *100;    //Here the unit is converted to cm
 }
 
+int DHT11_init(struct DHT11_Dev* dev, GPIO_TypeDef* port, uint16_t pin) {
+	TIM_TimeBaseInitTypeDef TIM_TimBaseStructure;
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	dev->port = port;
+	dev->pin = pin;
+
+	//Initialise TIMER2
+	TIM_TimBaseStructure.TIM_Period = 84000000 - 1;
+	TIM_TimBaseStructure.TIM_Prescaler = 84;
+	TIM_TimBaseStructure.TIM_ClockDivision = 0;
+	TIM_TimBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIM3, &TIM_TimBaseStructure);
+	TIM_Cmd(TIM3, ENABLE);
+
+	//Initialise GPIO DHT11
+	GPIO_InitStructure.GPIO_Pin = dev->pin;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+        //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(dev->port, &GPIO_InitStructure);
+
+	return 0;
+}
 
 
+int DHT11_read(struct DHT11_Dev* dev) {
+
+	//Initialisation
+	uint8_t i, j, temp;
+	uint8_t data[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	//Generate START condition
+	//o
+	GPIO_InitStructure.GPIO_Pin = dev->pin;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	//GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(dev->port, &GPIO_InitStructure);
+
+	//dev->port->MODER |= GPIO_MODER_MODER6_0;
+
+	//Put LOW for at least 18ms
+	GPIO_ResetBits(dev->port, dev->pin);
+        
+	//wait 18ms
+	TIM3->CNT = 0;
+	while((TIM3->CNT) <= 18000);
+
+	//Put HIGH for 20-40us
+	GPIO_SetBits(dev->port, dev->pin);
+
+	//wait 40us
+	TIM3->CNT = 0;
+	while((TIM3->CNT) <= 40);
+	//End start condition
+
+	//io();
+	//Input mode to receive data
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Init(dev->port, &GPIO_InitStructure);
+
+	//DHT11 ACK
+	//should be LOW for at least 80us
+	//while(!GPIO_ReadInputDataBit(dev->port, dev->pin));
+	TIM3->CNT = 0;
+	while(!GPIO_ReadInputDataBit(dev->port, dev->pin)) {
+		if(TIM3->CNT > 100)
+			return DHT11_ERROR_TIMEOUT;
+	}
+
+	//should be HIGH for at least 80us
+	//while(GPIO_ReadInputDataBit(dev->port, dev->pin));
+	TIM3->CNT = 0;
+	while(GPIO_ReadInputDataBit(dev->port, dev->pin)) {
+		if(TIM3->CNT > 100)
+			return DHT11_ERROR_TIMEOUT;
+	}
+
+	//Read 40 bits (8*5)
+	for(j = 0; j < 5; ++j) {
+		for(i = 0; i < 8; ++i) {
+
+			//LOW for 50us
+			while(!GPIO_ReadInputDataBit(dev->port, dev->pin));
+			/*TIM2->CNT = 0;
+			while(!GPIO_ReadInputDataBit(dev->port, dev->pin)) {
+				if(TIM2->CNT > 60)
+					return DHT11_ERROR_TIMEOUT;
+			}*/
+
+			//Start counter
+			TIM_SetCounter(TIM3, 0);
+
+			//HIGH for 26-28us = 0 / 70us = 1
+			while(GPIO_ReadInputDataBit(dev->port, dev->pin));
+			/*while(!GPIO_ReadInputDataBit(dev->port, dev->pin)) {
+				if(TIM2->CNT > 100)
+					return DHT11_ERROR_TIMEOUT;
+			}*/
+
+			//Calc amount of time passed
+			temp = TIM_GetCounter(TIM3);
+
+			//shift 0
+			data[j] = data[j] << 1;
+
+			//if > 30us it's 1
+			if(temp > 40)
+				data[j] = data[j]+1;
+		}
+	}
+
+	//verify the Checksum
+	//if(data[4] != (data[0] + data[2]))
+	//	return DHT11_ERROR_CHECKSUM;
+
+	//set data
+	dev->temparature = data[2];
+	dev->humidity = data[0];
+
+	return DHT11_SUCCESS;
+}
+
+void init_DHT(void)
+{
+            res = DHT11_read(&dev);
+
+            if(res == b) {
+                    printf("DHT11_ERROR_CHECKSUM\n");
+                                     }
+            else if(res == a) {
+
+                    printf("dht11 success\n");
+                    printf("TEMPRATURE %d - HUMIDITY %d\n", dev.temparature, dev.humidity);
+
+                    char example[100];
+
+                    /* Copy the first string into the variable */
+                    char result[50];
+                    char resultt[50];
+
+                    sprintf(result, "%d", dev.temparature);
+                    sprintf(resultt, "%d", dev.humidity);
+                    /* Concatenate the following two strings to the end of the first one */
+                    strcpy(example, "{\"Temp\":");
+                    strcat(example, result);
+                    strcat(example, ",");
+                    strcat(example, "\"Hum\":");
+                    strcat(example, resultt);
+                    strcat(example, "}");
+                    //USARTSend(example);
+
+                    printf("data : %s\n", example);
+                   
+
+                     }
+                    else {
+                     printf("TIMEOUT \r \n");
+                             }
+                    //delay 5 second
+                    int c, d;
+                    for (c = 1; c <= 5000; c++)
+                    for (d = 1; d <= 5000; ++d);
+
+}
+
+
+void USART1_IRQHandler() {
+    uint16_t word;
+    if(USART_GetITStatus(USART1,USART_IT_RXNE)!=RESET){
+        // the most recent received data by the USART1 peripheral
+        word = USART_ReceiveData(USART1);
+
+     
+        sendDataUART2(word);
+        
+        // clear 'Read data register not empty' flag
+        USART_ClearITPendingBit(USART1,USART_IT_RXNE);
+    }
+}
+
+// TODO!!!: USART2 handler
+void USART2_IRQHandler() {
+
+    uint16_t word;
+    if(USART_GetITStatus(USART2,USART_IT_RXNE)!=RESET){
+        // the most recent received data by the USART1 peripheral
+        word = USART_ReceiveData(USART2);
+
+        sendDataUART1(word);
+       
+
+        // clear 'Read data register not empty' flag
+        USART_ClearITPendingBit(USART2,USART_IT_RXNE);
+    }
+}
+
+
+
+void sendDataUART1(uint16_t data) {
+    
+    USART_SendData(USART1, data);
+}
+
+void sendDataUART2(uint16_t data) {
+    USART_SendData(USART2, data);
+}
+
+  
 int main(void)
 {
     float distance;
@@ -282,15 +525,17 @@ int main(void)
     DMA_Configure();
     
     UltrasonicWave_Init();
-    //delay_init();
 
+    //DHT11_init(&dev, GPIOB, GPIO_Pin_6);
+
+    
     while (1){
+      //init_DHT();
       ADC_DMACmd(ADC1, ENABLE); // To use light sensor
       distance = UltrasonicWave_Measure();
       printf("distance:%5.2f\n",distance);
       printf("light: %d\n", ADC_Value[0]);
+      printf("-----------------------------\n");
       Delay_us(90);
-      
-      
     }
 }
