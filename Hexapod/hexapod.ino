@@ -58,6 +58,7 @@ void setup()
     dynamixel::PacketHandler *packetHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
     int dxl_comm_result = COMM_TX_FAIL;
     uint8_t dxl_error = 0;
+    uint16_t dxl_present_position = 0;
     // Open port
     if (portHandler->openPort())
     {
@@ -111,6 +112,8 @@ void setup()
             {
             case 1:
                 dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosCoxa, &dxl_error);
+                dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, i, 30, &dxl_present_position, &dxl_error);
+
                 if (dxl_comm_result != COMM_SUCCESS)
                 {
                     Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
@@ -119,6 +122,13 @@ void setup()
                 {
                     Serial.print(packetHandler->getRxPacketError(dxl_error));
                 }
+                Serial.print("[ID:");
+                Serial.print(i);
+                Serial.print("] GoalPos:");
+                Serial.print(InitPosCoxa);
+                Serial.print("  PresPos:");
+                Serial.print(dxl_present_position);
+                Serial.println(" ");
                 break;
 
             case 2:
@@ -149,31 +159,179 @@ void setup()
                 break;
             }
         }
-        int command[128] = {
-            0,
-        };
-        // usart command input
-        if (sizeof(command) / sizeof(int) == 128)
-            break;
-        int new_command = Serial.read();
 
-        // if input command is 'stop', don't do walking process
-        // command do
-        switch (command[0]) //delete하는 식으로 하면 c에선 너무 비효율적. 다른 자료구조 활용
+        delay(300);
+
+        // Step1 Test
+        // L
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep1, &dxl_error);
+        dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, 10, 30, &dxl_present_position, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
         {
-        case 0:
-            // stop
-            break;
-        case 1:
-            // foward walking
-            for (int i = 0; i < 4; i++) {
-                
-            }
-            break;
-
-        default:
-            break;
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
         }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+        Serial.print("[ID:");
+        Serial.print(10);
+        Serial.print("] GoalPos:");
+        Serial.print(LCoxaStep1);
+        Serial.print("  PresPos:");
+        Serial.print(dxl_present_position);
+        Serial.println(" ");
+
+        // R
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // L
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // R
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // L
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, LTibiaStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // L
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, RTibiaStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        delay(300);
+        // Step2 Test
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep2, &dxl_error);
+        dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, 10, 30, &dxl_present_position, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+        Serial.print("[ID:");
+        Serial.print(10);
+        Serial.print("] GoalPos:");
+        Serial.print(LCoxaStep2);
+        Serial.print("  PresPos:");
+        Serial.print(dxl_present_position);
+        Serial.println(" ");
+
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep2, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, LTibiaStep2, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        delay(300);
+        // Step3 Test
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep3, &dxl_error);
+        dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, 10, 30, &dxl_present_position, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+        Serial.print("[ID:");
+        Serial.print(10);
+        Serial.print("] GoalPos:");
+        Serial.print(LCoxaStep3);
+        Serial.print("  PresPos:");
+        Serial.print(dxl_present_position);
+        Serial.println(" ");
+
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep3, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, LTibiaStep3, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // usart command input
+
+        // command do
     }
 
     // Torque disable
