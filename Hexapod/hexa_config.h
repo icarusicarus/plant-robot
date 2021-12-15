@@ -1,11 +1,11 @@
 // Start Angles
-#define InitPosCoxa 150
-#define InitPosFemur 115
-#define InitPosTibia 110
+#define InitPosCoxa 512
+#define InitPosFemur 512
+#define InitPosTibia 310
 
 // Motor Id Numbers
-#define TotalMotors 3
-//#define TotalMotors 18
+//#define TotalMotors 3
+#define TotalMotors 18
 
 #define LFCoxaMotorId 1
 #define LFFemurMotorId 2
@@ -31,15 +31,35 @@
 #define RRFemurMotorId 17
 #define RRTibiaMotorId 18
 
-// Min/Max Angles
-#define CoxaMin
-#define CoxaMax
+// Step1 Angles
+#define LCoxaStep1 256
+#define RCoxaStep1 256
 
-#define FemurMin
-#define FemurMax
+#define LFemurStep1 300
+#define RFemurStep1 300
 
-#define TibiaMin
-#define TibiaMax
+#define LTibiaStep1 852
+#define RTibiaStep1 852
+
+// Step2 Angles
+#define LCoxaStep2 256
+#define RCoxaStep2 768
+
+#define LFemurStep2 512
+#define RFemurStep2 512
+
+#define LTibiaStep2 310
+#define RTibiaStep2 310
+
+// Step3 Angles
+#define LCoxaStep3 768
+#define RCoxaStep3 256
+
+#define LFemurStep3 512
+#define RFemurStep3 512
+
+#define LTibiaStep3 310
+#define RTibiaStep3 310
 
 // Leg Length
 #define CoxaLength 58
