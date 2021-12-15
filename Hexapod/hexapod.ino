@@ -149,17 +149,26 @@ void setup()
                 break;
             }
         }
-
+        int command[128] = {
+            0,
+        };
         // usart command input
+        if (sizeof(command) / sizeof(int) == 128)
+            break;
+        int new_command = Serial.read();
 
+        // if input command is 'stop', don't do walking process
         // command do
-        switch (command)
+        switch (command[0]) //delete하는 식으로 하면 c에선 너무 비효율적. 다른 자료구조 활용
         {
         case 0:
             // stop
             break;
-        case 1: // foward walking
-
+        case 1:
+            // foward walking
+            for (int i = 0; i < 4; i++) {
+                
+            }
             break;
 
         default:
