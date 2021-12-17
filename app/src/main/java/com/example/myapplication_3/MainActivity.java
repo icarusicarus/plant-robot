@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+
+        
         btnUp.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
