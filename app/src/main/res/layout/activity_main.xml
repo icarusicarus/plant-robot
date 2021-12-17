@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#0000"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBluetoothOn"
+            android:layout_width="20dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="블루투스 ON"
+            android:fontFamily="@font/gosanja"
+            android:textSize="12dp"
+            android:background = "@drawable/button_round"
+            android:backgroundTint="@color/light_gray"/>
+
+        <Button
+            android:id="@+id/btnBluetoothOff"
+            android:layout_width="30dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="블루투스 OFF"
+            android:fontFamily="@font/gosanja"
+            android:textSize="12dp"
+            android:background = "@drawable/button_round"
+            android:backgroundTint="@color/light_gray"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvBluetoothStatus"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:text="status"
+            android:textColor="@color/black"/>
+
+        <ImageButton
+            android:id="@+id/btnConnect"
+            android:layout_width="300dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#0000"
+            android:gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/hexapod" />
+
+        <TextView
+            android:id="@+id/tvReceiveData"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Receive"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="온도"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:fontFamily="@font/gosanja"/>
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:hint="온도"
+                android:textSize="25dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="습도"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:fontFamily="@font/gosanja"/>
+
+            <TextView
+                android:id="@+id/humd"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:hint="습도"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="조도"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:fontFamily="@font/gosanja"/>
+
+            <TextView
+                android:id="@+id/ilm"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:hint="조도"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+<!--        <Button-->
+<!--            android:id="@+id/btnSendData"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:text="전송" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/tvSendData"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:layout_marginLeft="8dp"-->
+<!--            android:ems="10"-->
+<!--            android:inputType="textPersonName"-->
+<!--            android:text="Send Data" />-->
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="241dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:src="@drawable/circle"></ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#0000"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnUp"
+                android:layout_width="63dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/btnup"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:backgroundTint="#0000"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnLeft"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/btnleft"/>
+
+                <ImageButton
+                    android:id="@+id/btnStop"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/btnstop"/>
+
+                <ImageButton
+                    android:id="@+id/btnRight"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="55dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/btnright"/>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="63dp"
+                android:layout_height="53dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="5dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/btndown"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/btnSun"
+            android:layout_width="72dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/btnsun"
+            android:scaleType="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:text="햇빛 찾기"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:fontFamily="@font/gosanja"/>
+    </LinearLayout>
+
+
+</LinearLayout>
