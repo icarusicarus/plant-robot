@@ -312,9 +312,31 @@ void setup()
         Serial.print(dxl_present_position);
         Serial.println(" ");
 
-        delay(500);
+        // R1
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
         // L3
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep3, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // R1
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep1, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
         {
@@ -338,29 +360,6 @@ void setup()
         }
 
         // R1
-        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep1, &dxl_error);
-
-        if (dxl_comm_result != COMM_SUCCESS)
-        {
-            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
-        }
-        else if (dxl_error != 0)
-        {
-            Serial.print(packetHandler->getRxPacketError(dxl_error));
-        }
-        // R1
-        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep1, &dxl_error);
-
-        if (dxl_comm_result != COMM_SUCCESS)
-        {
-            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
-        }
-        else if (dxl_error != 0)
-        {
-            Serial.print(packetHandler->getRxPacketError(dxl_error));
-        }
-
-        // R1
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, RTibiaStep1, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
@@ -371,7 +370,7 @@ void setup()
         {
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
-        delay(100);
+        delay(500);
         // R2
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep2, &dxl_error);
 
