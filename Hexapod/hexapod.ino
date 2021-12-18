@@ -163,7 +163,7 @@ void setup()
         delay(300);
 
         // Step1 Test
-        // L
+        // L1
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep1, &dxl_error);
         dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, 10, 30, &dxl_present_position, &dxl_error);
 
@@ -183,8 +183,8 @@ void setup()
         Serial.print(dxl_present_position);
         Serial.println(" ");
 
-        // R
-        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep1, &dxl_error);
+        // R3
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep3, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
         {
@@ -195,7 +195,7 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
-        // L
+        // L1
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep1, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
@@ -207,8 +207,8 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
-        // R
-        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep1, &dxl_error);
+        // R3
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep3, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
         {
@@ -219,7 +219,7 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
-        // L
+        // L1
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, LTibiaStep1, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
@@ -231,8 +231,8 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
-        // L
-        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, RTibiaStep1, &dxl_error);
+        // R3
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, RTibiaStep3, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
         {
@@ -244,7 +244,9 @@ void setup()
         }
 
         delay(300);
+
         // Step2 Test
+        // L2
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep2, &dxl_error);
         dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, 10, 30, &dxl_present_position, &dxl_error);
 
@@ -264,6 +266,7 @@ void setup()
         Serial.print(dxl_present_position);
         Serial.println(" ");
 
+        // L2
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep2, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
@@ -275,6 +278,7 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
+        // L2
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, LTibiaStep2, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
@@ -288,6 +292,7 @@ void setup()
 
         delay(300);
         // Step3 Test
+        // L3
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep3, &dxl_error);
         dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, 10, 30, &dxl_present_position, &dxl_error);
 
@@ -307,6 +312,19 @@ void setup()
         Serial.print(dxl_present_position);
         Serial.println(" ");
 
+        // R1
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // L3
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, LFemurStep3, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
@@ -318,7 +336,68 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
+        // R1
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // L3
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, LTibiaStep3, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // R1
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, RTibiaStep1, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // R2
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep2, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // R2
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, RFemurStep2, &dxl_error);
+
+        if (dxl_comm_result != COMM_SUCCESS)
+        {
+            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+        }
+        else if (dxl_error != 0)
+        {
+            Serial.print(packetHandler->getRxPacketError(dxl_error));
+        }
+
+        // R2
+        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, RTibiaStep2, &dxl_error);
 
         if (dxl_comm_result != COMM_SUCCESS)
         {
