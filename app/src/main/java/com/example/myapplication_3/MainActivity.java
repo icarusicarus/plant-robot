@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-//        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
+        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
 //        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
 //        mTvSendData =  (EditText) findViewById(R.id.tvSendData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
@@ -117,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-
-
         btnUp.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -385,4 +383,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    }
+}

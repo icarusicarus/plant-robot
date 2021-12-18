@@ -25,36 +25,34 @@
             android:layout_height="40dp"
             android:text="블루투스 ON"
             android:fontFamily="@font/gosanja"
-            android:textSize="12dp"
-            android:background = "@drawable/button_round"
-            android:backgroundTint="@color/light_gray"/>
+            android:drawable="@drawable/button_round"
+            android:textSize="12dp" />
 
         <Button
             android:id="@+id/btnBluetoothOff"
-            android:layout_width="30dp"
+            android:layout_width="20dp"
             android:layout_weight="1"
             android:layout_height="40dp"
             android:text="블루투스 OFF"
             android:fontFamily="@font/gosanja"
-            android:textSize="12dp"
-            android:background = "@drawable/button_round"
-            android:backgroundTint="@color/light_gray"/>
+            android:drawable="@drawable/button_round"
+            android:textSize="12dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="235dp"
         android:gravity="center"
         android:layout_gravity="center"
         android:orientation="vertical">
 
-<!--        <TextView-->
-<!--            android:id="@+id/tvBluetoothStatus"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="20dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:text="status"-->
-<!--            android:textColor="@color/black"/>-->
+        <TextView
+            android:id="@+id/tvBluetoothStatus"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:text="status"
+            android:textColor="@color/black"/>
 
         <ImageButton
             android:id="@+id/btnConnect"
@@ -202,7 +200,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:backgroundTint="#0000"
             android:orientation="vertical">
 
