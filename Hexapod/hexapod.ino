@@ -160,7 +160,7 @@ void setup()
             }
         }
 
-        delay(300);
+        delay(500);
 
         // Step1 Test
         // L1
@@ -243,7 +243,7 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
-        delay(300);
+        delay(500);
 
         // Step2 Test
         // L2
@@ -290,7 +290,7 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
-        delay(300);
+        delay(500);
         // Step3 Test
         // L3
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, LCoxaStep3, &dxl_error);
@@ -372,6 +372,7 @@ void setup()
             Serial.print(packetHandler->getRxPacketError(dxl_error));
         }
 
+        delay(500);
         // R2
         dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, RCoxaStep2, &dxl_error);
 
