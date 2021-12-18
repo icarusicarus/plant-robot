@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
-        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
+//        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
+//        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
 //        mTvSendData =  (EditText) findViewById(R.id.tvSendData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        
+
         btnUp.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    mTvReceiveData.setText(readMessage);
+//                    mTvReceiveData.setText(readMessage);
                     String[] array = readMessage.split(",");
                     temp.setText(array[0].concat("C"));
                     humd.setText(array[1].concat("%"));

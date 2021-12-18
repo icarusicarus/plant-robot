@@ -43,17 +43,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="220dp"
         android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvBluetoothStatus"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_marginTop="10dp"
-            android:text="status"
-            android:textColor="@color/black"/>
+<!--        <TextView-->
+<!--            android:id="@+id/tvBluetoothStatus"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:text="status"-->
+<!--            android:textColor="@color/black"/>-->
 
         <ImageButton
             android:id="@+id/btnConnect"
@@ -66,6 +67,7 @@
             android:scaleType="center"
             android:src="@drawable/hexapod" />
 
+
         <TextView
             android:id="@+id/tvReceiveData"
             android:layout_width="match_parent"
@@ -74,6 +76,14 @@
             android:gravity="center"
             android:text="Receive"
             android:textColor="@color/black"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,24 +93,24 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="left"
-                android:layout_weight="1"
-                android:text="온도"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:fontFamily="@font/gosanja"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:text="온도"
+                    android:textColor="@color/black"
+                    android:textSize="25dp"
+                    android:fontFamily="@font/gosanja"/>
 
-            <TextView
-                android:id="@+id/temp"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:hint="온도"
-                android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/temp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:hint="온도"
+                    android:textSize="25dp" />
 
         </LinearLayout>
 
@@ -112,24 +122,24 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="left"
-                android:layout_weight="1"
-                android:text="습도"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:fontFamily="@font/gosanja"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:text="습도"
+                    android:textColor="@color/black"
+                    android:textSize="25dp"
+                    android:fontFamily="@font/gosanja"/>
 
-            <TextView
-                android:id="@+id/humd"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:hint="습도"
-                android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/humd"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:hint="습도"
+                    android:textSize="25dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -140,26 +150,26 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="조도"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:fontFamily="@font/gosanja"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="조도"
+                    android:textColor="@color/black"
+                    android:textSize="25dp"
+                    android:fontFamily="@font/gosanja"/>
 
-            <TextView
-                android:id="@+id/ilm"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:hint="조도"
-                android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/ilm"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:hint="조도"
+                    android:textSize="25dp" />
         </LinearLayout>
-
+    </LinearLayout>
 <!--        <Button-->
 <!--            android:id="@+id/btnSendData"-->
 <!--            android:layout_width="wrap_content"-->
@@ -176,16 +186,17 @@
 <!--            android:inputType="textPersonName"-->
 <!--            android:text="Send Data" />-->
 
-    </LinearLayout>
+
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="241dp"
+        android:layout_height="230dp"
         android:layout_gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="230dp"
             android:src="@drawable/circle"></ImageView>
 
         <LinearLayout
@@ -274,7 +285,7 @@
             android:text="햇빛 찾기"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="13dp"
             android:fontFamily="@font/gosanja"/>
     </LinearLayout>
 
