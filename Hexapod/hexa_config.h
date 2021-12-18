@@ -32,34 +32,34 @@
 #define RRTibiaMotorId 18
 
 // Step1 Angles
-#define LCoxaStep1 256
 #define RCoxaStep1 256
+#define LCoxaStep1 768
 
-#define LFemurStep1 300
 #define RFemurStep1 300
+#define LFemurStep1 300
 
-#define LTibiaStep1 852
-#define RTibiaStep1 450
+#define RTibiaStep1 852
+#define LTibiaStep1 450
 
 // Step2 Angles
-#define LCoxaStep2 256
-#define RCoxaStep2 768
+#define RCoxaStep2 256
+#define LCoxaStep2 768
 
-#define LFemurStep2 512
 #define RFemurStep2 512
+#define LFemurStep2 512
 
-#define LTibiaStep2 310
 #define RTibiaStep2 310
+#define LTibiaStep2 310
 
 // Step3 Angles
-#define LCoxaStep3 768
-#define RCoxaStep3 256
+#define RCoxaStep3 768
+#define LCoxaStep3 256
 
-#define LFemurStep3 512
 #define RFemurStep3 512
+#define LFemurStep3 512
 
-#define LTibiaStep3 310
 #define RTibiaStep3 310
+#define LTibiaStep3 310
 
 // Leg Length
 #define CoxaLength 58
