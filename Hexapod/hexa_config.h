@@ -39,7 +39,7 @@
 #define RFemurStep1 300
 
 #define LTibiaStep1 852
-#define RTibiaStep1 852
+#define RTibiaStep1 450
 
 // Step2 Angles
 #define LCoxaStep2 256
