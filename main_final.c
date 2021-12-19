@@ -529,9 +529,9 @@ void init_DHT(void)
                              }
                     
                     //delay 5 second
-                    int c, d;
-                    for (c = 1; c <= 5000; c++)
-                    for (d = 1; d <= 5000; ++d);
+                    //int c, d;
+                    //for (c = 1; c <= 1000; c++)
+                    //for (d = 1; d <= 1000; ++d);
 
 }
 
@@ -624,10 +624,20 @@ int main(void)
       init_DHT();
       ADC_DMACmd(ADC1, ENABLE); // To use light sensor
       distance = UltrasonicWave_Measure();
+      
       printf("distance:%5.2f\n",distance);
-     
       printf("light: %d\n", light);
       printf("humid: %d\n", humid);
+      
+      if(distance < 900.0){
+        GPIO_SetBits(GPIOD, GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_7);
+        sendDataUART1('s');
+        Delay_us(20);
+      }
+      
+      else{
+        GPIO_ResetBits(GPIOD, GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_7);
+      }
 
       char buf[16] = {0,};
       sprintf(buf, "%d,%d,%d\r\n", dev.temparature, dev.humidity, light);
