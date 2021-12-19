@@ -106,11 +106,9 @@ void setup()
         int front = 0;
         int rear = 0;
         int flag = 0;
-        Serial.println(Serial1.available());
 
         while (Serial1.available())
         {
-            Serial.println("Hello");
             char read_data = (char)Serial1.read();
             Serial.println(read_data);
 
