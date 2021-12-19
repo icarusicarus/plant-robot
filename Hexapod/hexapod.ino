@@ -179,10 +179,15 @@ void setup()
             }
 
             if ((data[front] == 's') || (flag == 1))
+            {
+                flag = 0;
                 break;
+            }
 
             if ((data[front] == '1') && (flag != 1))
             {
+                Serial.print("Flag is ");
+                Serial.println(flag);
                 // ==================================================================================================
                 // Pattern[0]
                 // First Legs: Coxa
