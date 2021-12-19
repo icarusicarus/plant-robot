@@ -35,9 +35,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    TextView mTvBluetoothStatus;
-    TextView mTvReceiveData;
-    TextView mTvSendData;
+
     ImageView bluetoothStatus;
     ImageView direction;
     Button mBtnBluetoothOn;
@@ -76,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
         actionBar.hide();
 
         bluetoothStatus = (ImageView)findViewById(R.id.bluetoothstatus);
-        direction = (ImageView)findViewById(R.id.direction);
-//        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (ImageButton)findViewById(R.id.btnConnect);
@@ -94,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         TextView humd = (TextView)findViewById(R.id.humd);
         TextView ilm = (TextView)findViewById(R.id.ilm);
 
-        direction.setVisibility(View.INVISIBLE);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -133,14 +128,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }));
-//        btnUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(mThreadConnectedBluetooth != null){
-//                    mThreadConnectedBluetooth.write("1");
-//                }
-//            }
-//        });
+
         // down 버튼 눌렀을 때
         btnDown.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
             @Override
@@ -152,14 +140,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }));
-//        btnDown.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(mThreadConnectedBluetooth != null){
-//                    mThreadConnectedBluetooth.write("2");
-//                }
-//            }
-//        });
+
         // left 버튼 눌렀을 때
         btnLeft.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
             @Override
@@ -171,14 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }));
-//        btnLeft.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(mThreadConnectedBluetooth != null){
-//                    mThreadConnectedBluetooth.write("3");
-//                }
-//            }
-//        });
+
         // right 버튼 눌렀을 때
         btnRight.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
             @Override
@@ -190,15 +164,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }));
-//        btnRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "short right",Toast.LENGTH_SHORT).show();
-//                if(mThreadConnectedBluetooth != null){
-//                    mThreadConnectedBluetooth.write("4");
-//                }
-//            }
-//        });
 
         // stop 버튼 눌렀을 때
         btnStop.setOnTouchListener(new LongPressRepeatListener(500, 1000, new View.OnClickListener() {
@@ -243,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     String[] array = readMessage.split(",");
                     if(array[2]=="0"){
                         if(mBluetoothHandler != null){
-                            mBluetoothHandler.removeMessages(0);
+                            //mBluetoothHandler.removeCallbacksAndMessages(null);
                         }
                     }
 
