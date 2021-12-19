@@ -3,6 +3,7 @@ package com.example.myapplication_3;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -20,6 +21,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mTvBluetoothStatus;
     TextView mTvReceiveData;
     TextView mTvSendData;
+    ImageView bluetoothStatus;
+    ImageView direction;
     Button mBtnBluetoothOn;
     Button mBtnBluetoothOff;
     ImageButton mBtnConnect;
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        bluetoothStatus = (ImageView)findViewById(R.id.bluetoothstatus);
+        direction = (ImageView)findViewById(R.id.direction);
         mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
 //        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
@@ -89,18 +95,22 @@ public class MainActivity extends AppCompatActivity {
         TextView humd = (TextView)findViewById(R.id.humd);
         TextView ilm = (TextView)findViewById(R.id.ilm);
 
+        direction.setVisibility(View.INVISIBLE);
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         mBtnBluetoothOn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bluetoothOn();
+                bluetoothStatus.setImageDrawable(getResources().getDrawable(R.drawable.bluetooth_on));
             }
         });
         mBtnBluetoothOff.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bluetoothOff();
+                bluetoothStatus.setImageDrawable(getResources().getDrawable(R.drawable.bluetooth_off));
             }
         });
         mBtnConnect.setOnClickListener(new Button.OnClickListener() {
@@ -276,9 +286,11 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
                     Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
                     mTvBluetoothStatus.setText("활성화");
+
                 } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
                     Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
                     mTvBluetoothStatus.setText("비활성화");
+                    bluetoothStatus.setImageDrawable(getResources().getDrawable(R.drawable.bluetooth_off));
                 }
                 break;
         }
