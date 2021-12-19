@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         bluetoothStatus = (ImageView)findViewById(R.id.bluetoothstatus);
         direction = (ImageView)findViewById(R.id.direction);
 //        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
-        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (ImageButton)findViewById(R.id.btnConnect);
@@ -241,8 +240,13 @@ public class MainActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    mTvReceiveData.setText(readMessage);
                     String[] array = readMessage.split(",");
+                    if(array[2]=="0"){
+                        if(mBluetoothHandler != null){
+                            mBluetoothHandler.removeMessages(0);
+                        }
+                    }
+
                     temp.setText(array[0].concat("C"));
                     humd.setText(array[1].concat("%"));
                     ilm.setText(array[2].concat("lx"));
@@ -376,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
                     bytes = mmInStream.available();
                     if (bytes != 0) { // 송신된 데이터가 존재한다면
-                        SystemClock.sleep(100);
+                        SystemClock.sleep(1000);
                         bytes = mmInStream.available();
                         bytes = mmInStream.read(buffer, 0, bytes); // 데이터 읽어오기
                         mBluetoothHandler.obtainMessage(BT_MESSAGE_READ, bytes, -1, buffer).sendToTarget();
