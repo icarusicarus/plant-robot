@@ -18,6 +18,8 @@
 #define DHT11_ERROR_CHECKSUM  2
 #define DHT11_ERROR_TIMEOUT   3
 
+uint16_t led_pins[] = {GPIO_Pin_7, GPIO_Pin_4, GPIO_Pin_3, GPIO_Pin_2};
+
 int res;
 int i;
 int a = 1;
@@ -146,6 +148,13 @@ void GPIO_Configure(void)
     
     // relay
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+    
+    // LED
+    /* LED pin setting*/
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_7;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOD, &GPIO_InitStructure);
@@ -297,12 +306,12 @@ void DMA1_Channel1_IRQHandler(void)
     
 
     if(humid < 2000){
-          GPIO_ResetBits(GPIOD, GPIO_Pin_12);
-          printf("humid under 2000\n");
+          GPIO_SetBits(GPIOD, GPIO_Pin_12);
+          
       }
       else{
-          GPIO_SetBits(GPIOD, GPIO_Pin_12);
-          printf("humid up 2000\n");
+          GPIO_ResetBits(GPIOD, GPIO_Pin_12);
+          
       }
     
     DMA_ClearITPendingBit(DMA1_IT_TC1);
@@ -615,22 +624,22 @@ int main(void)
       init_DHT();
       ADC_DMACmd(ADC1, ENABLE); // To use light sensor
       distance = UltrasonicWave_Measure();
-      //printf("distance:%5.2f\n",distance);
+      printf("distance:%5.2f\n",distance);
      
-      //printf("light: %d\n", light);
+      printf("light: %d\n", light);
       printf("humid: %d\n", humid);
 
       char buf[16] = {0,};
       sprintf(buf, "%d,%d,%d\r\n", dev.temparature, dev.humidity, light);
       int l = 0;
         while(buf[l] != '\0'){
-          sendDataUART1(buf[l]);
+          sendDataUART2(buf[l]);
           l++;
           Delay_us(20);
         }
           
 
       printf("-----------------------------\n");
-      Delay_us(5000);
+      Delay_us(1000);
     }
 }
