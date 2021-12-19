@@ -41,15 +41,8 @@ int kbhit(void)
 
 void setup()
 {
+    Serial.begin(9600);
     Serial1.begin(9600);
-    // while (!Serial1)
-    //     Serial.println("omg");
-    if (Serial1.available() > 0)
-    {
-        Serial.println("omg..");
-    }
-    else
-        Serial.println("oh yes..");
     while (!Serial)
         ;
 
@@ -106,317 +99,308 @@ void setup()
             Serial.print("Dynamixel has been successfully connected \n");
         }
     }
-}
 
-void loop()
-{
-    dynamixel::PortHandler *portHandler = dynamixel::PortHandler::getPortHandler(DEVICENAME);
-
-    dynamixel::PacketHandler *packetHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
-
-    int dxl_comm_result = COMM_TX_FAIL;
-    uint8_t dxl_error = 0;
-    uint16_t dxl_present_position = 0;
-
-    char data[256] = {
-        0,
-    };
-    int front = 0;
-    int rear = 0;
-    int flag = 0;
-
-    while (Serial1.available())
+    while (1)
     {
-        Serial.print("Hello");
-        char read_data = (char)Serial1.read();
-        Serial.println(read_data);
+        char data[256];
+        int front = 0;
+        int rear = 0;
+        int flag = 0;
+        Serial.println(Serial1.available());
 
-        if (read_data == 's')
+        while (Serial1.available())
         {
-            flag = 1;
-        }
-        data[rear] = read_data;
-        rear++;
+            Serial.println("Hello");
+            char read_data = (char)Serial1.read();
+            Serial.println(read_data);
 
-        if (data[front] == 'C') // Bluetooth Connected
-        {
-            // Init Start Position
-            for (int i = 1; i < TotalMotors + 1; i++)
+            if (read_data == 's')
             {
-                switch (i % 3)
-                {
-                case 1:
-                    dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosCoxa, &dxl_error);
-                    dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, i, 30, &dxl_present_position, &dxl_error);
-
-                    if (dxl_comm_result != COMM_SUCCESS)
-                    {
-                        Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
-                    }
-                    else if (dxl_error != 0)
-                    {
-                        Serial.print(packetHandler->getRxPacketError(dxl_error));
-                    }
-                    Serial.print("[ID:");
-                    Serial.print(i);
-                    Serial.print("] GoalPos:");
-                    Serial.print(InitPosCoxa);
-                    Serial.print("  PresPos:");
-                    Serial.print(dxl_present_position);
-                    Serial.println(" ");
-                    break;
-
-                case 2:
-                    dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosFemur, &dxl_error);
-                    if (dxl_comm_result != COMM_SUCCESS)
-                    {
-                        Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
-                    }
-                    else if (dxl_error != 0)
-                    {
-                        Serial.print(packetHandler->getRxPacketError(dxl_error));
-                    }
-                    break;
-
-                case 3:
-                    dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosTibia, &dxl_error);
-                    if (dxl_comm_result != COMM_SUCCESS)
-                    {
-                        Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
-                    }
-                    else if (dxl_error != 0)
-                    {
-                        Serial.print(packetHandler->getRxPacketError(dxl_error));
-                    }
-                    break;
-
-                default:
-                    break;
-                }
+                flag = 1;
             }
-            front++;
-        }
+            data[rear] = read_data;
+            rear++;
 
-        if ((data[front] == 's') || (flag == 1))
-            break;
+            if (data[front] == 'C') // Bluetooth Connected
+            {
+                // Init Start Position
+                for (int i = 1; i < TotalMotors + 1; i++)
+                {
+                    switch (i % 3)
+                    {
+                    case 1:
+                        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosCoxa, &dxl_error);
+                        dxl_comm_result = packetHandler->read2ByteTxRx(portHandler, i, 30, &dxl_present_position, &dxl_error);
 
-        if ((data[front] == '1') && (flag != 1))
-        {
-            // ==================================================================================================
-            // Pattern[0]
-            // First Legs: Coxa
-            // L1: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep1, &dxl_error);
-            // L4: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep1, &dxl_error);
-            // L5: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep1, &dxl_error);
+                        if (dxl_comm_result != COMM_SUCCESS)
+                        {
+                            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+                        }
+                        else if (dxl_error != 0)
+                        {
+                            Serial.print(packetHandler->getRxPacketError(dxl_error));
+                        }
+                        Serial.print("[ID:");
+                        Serial.print(i);
+                        Serial.print("] GoalPos:");
+                        Serial.print(InitPosCoxa);
+                        Serial.print("  PresPos:");
+                        Serial.print(dxl_present_position);
+                        Serial.println(" ");
+                        break;
 
-            // Second Legs: Coxa
-            // L2: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep3, &dxl_error);
-            // L3: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep3, &dxl_error);
-            // L6: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep3, &dxl_error);
+                    case 2:
+                        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosFemur, &dxl_error);
+                        if (dxl_comm_result != COMM_SUCCESS)
+                        {
+                            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+                        }
+                        else if (dxl_error != 0)
+                        {
+                            Serial.print(packetHandler->getRxPacketError(dxl_error));
+                        }
+                        break;
 
-            // First Legs: Femur
-            // L1: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep1, &dxl_error);
-            // L4: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep1, &dxl_error);
-            // L5: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep1, &dxl_error);
+                    case 3:
+                        dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, i, 30, InitPosTibia, &dxl_error);
+                        if (dxl_comm_result != COMM_SUCCESS)
+                        {
+                            Serial.print(packetHandler->getTxRxResult(dxl_comm_result));
+                        }
+                        else if (dxl_error != 0)
+                        {
+                            Serial.print(packetHandler->getRxPacketError(dxl_error));
+                        }
+                        break;
 
-            // Second Legs: Femur
-            // L2: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep3, &dxl_error);
-            // L3: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep3, &dxl_error);
-            // L6: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep3, &dxl_error);
+                    default:
+                        break;
+                    }
+                }
+                front++;
+            }
 
-            // First Legs: Tibia
-            // L1: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep1, &dxl_error);
-            // L4: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep1, &dxl_error);
-            // L5: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep1, &dxl_error);
+            if ((data[front] == 's') || (flag == 1))
+                break;
 
-            // Second Legs: Tibia
-            // L2: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep3, &dxl_error);
-            // L3: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep3, &dxl_error);
-            // L6: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep3, &dxl_error);
+            if ((data[front] == '1') && (flag != 1))
+            {
+                // ==================================================================================================
+                // Pattern[0]
+                // First Legs: Coxa
+                // L1: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep1, &dxl_error);
+                // L4: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep1, &dxl_error);
+                // L5: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep1, &dxl_error);
 
-            // ==================================================================================================
+                // Second Legs: Coxa
+                // L2: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep3, &dxl_error);
+                // L3: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep3, &dxl_error);
+                // L6: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep3, &dxl_error);
 
-            delay(300);
+                // First Legs: Femur
+                // L1: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep1, &dxl_error);
+                // L4: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep1, &dxl_error);
+                // L5: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep1, &dxl_error);
 
-            // ==================================================================================================
-            // Pattern[1]
-            // First Legs: Coxa
-            // L1: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep2, &dxl_error);
-            // L4: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep2, &dxl_error);
-            // L5: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep2, &dxl_error);
+                // Second Legs: Femur
+                // L2: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep3, &dxl_error);
+                // L3: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep3, &dxl_error);
+                // L6: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep3, &dxl_error);
 
-            // Second Legs: Coxa
-            // L2: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep3, &dxl_error);
-            // L3: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep3, &dxl_error);
-            // L6: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep3, &dxl_error);
+                // First Legs: Tibia
+                // L1: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep1, &dxl_error);
+                // L4: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep1, &dxl_error);
+                // L5: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep1, &dxl_error);
 
-            // First Legs: Femur
-            // L1: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep2, &dxl_error);
-            // L4: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep2, &dxl_error);
-            // L5: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep2, &dxl_error);
+                // Second Legs: Tibia
+                // L2: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep3, &dxl_error);
+                // L3: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep3, &dxl_error);
+                // L6: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep3, &dxl_error);
 
-            // Second Legs: Femur
-            // L2: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep3, &dxl_error);
-            // L3: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep3, &dxl_error);
-            // L6: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep3, &dxl_error);
+                // ==================================================================================================
 
-            // First Legs: Tibia
-            // L1: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep2, &dxl_error);
-            // L4: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep2, &dxl_error);
-            // L5: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep2, &dxl_error);
+                delay(300);
 
-            // Second Legs: Tibia
-            // L2: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep3, &dxl_error);
-            // L3: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep3, &dxl_error);
-            // L6: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep3, &dxl_error);
+                // ==================================================================================================
+                // Pattern[1]
+                // First Legs: Coxa
+                // L1: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep2, &dxl_error);
+                // L4: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep2, &dxl_error);
+                // L5: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep2, &dxl_error);
 
-            // ==================================================================================================
+                // Second Legs: Coxa
+                // L2: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep3, &dxl_error);
+                // L3: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep3, &dxl_error);
+                // L6: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep3, &dxl_error);
 
-            delay(300);
+                // First Legs: Femur
+                // L1: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep2, &dxl_error);
+                // L4: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep2, &dxl_error);
+                // L5: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep2, &dxl_error);
 
-            // ==================================================================================================
-            // Pattern[2]
-            // First Legs: Coxa
-            // L1: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep3, &dxl_error);
-            // L4: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep3, &dxl_error);
-            // L5: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep3, &dxl_error);
+                // Second Legs: Femur
+                // L2: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep3, &dxl_error);
+                // L3: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep3, &dxl_error);
+                // L6: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep3, &dxl_error);
 
-            // Second Legs: Coxa
-            // L2: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep1, &dxl_error);
-            // L3: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep1, &dxl_error);
-            // L6: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep1, &dxl_error);
+                // First Legs: Tibia
+                // L1: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep2, &dxl_error);
+                // L4: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep2, &dxl_error);
+                // L5: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep2, &dxl_error);
 
-            // First Legs: Femur
-            // L1: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep3, &dxl_error);
-            // L4: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep3, &dxl_error);
-            // L5: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep3, &dxl_error);
+                // Second Legs: Tibia
+                // L2: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep3, &dxl_error);
+                // L3: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep3, &dxl_error);
+                // L6: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep3, &dxl_error);
 
-            // Second Legs: Femur
-            // L2: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep1, &dxl_error);
-            // L3: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep1, &dxl_error);
-            // L6: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep1, &dxl_error);
+                // ==================================================================================================
 
-            // First Legs: Tibia
-            // L1: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep3, &dxl_error);
-            // L4: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep3, &dxl_error);
-            // L5: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep3, &dxl_error);
+                delay(300);
 
-            // Second Legs: Tibia
-            // L2: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep1, &dxl_error);
-            // L3: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep1, &dxl_error);
-            // L6: Step1
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep1, &dxl_error);
+                // ==================================================================================================
+                // Pattern[2]
+                // First Legs: Coxa
+                // L1: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep3, &dxl_error);
+                // L4: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep3, &dxl_error);
+                // L5: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep3, &dxl_error);
 
-            // ==================================================================================================
+                // Second Legs: Coxa
+                // L2: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep1, &dxl_error);
+                // L3: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep1, &dxl_error);
+                // L6: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep1, &dxl_error);
 
-            delay(300);
+                // First Legs: Femur
+                // L1: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep3, &dxl_error);
+                // L4: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep3, &dxl_error);
+                // L5: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep3, &dxl_error);
 
-            // ==================================================================================================
-            // Pattern[3]
-            // First Legs: Coxa
-            // L1: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep3, &dxl_error);
-            // L4: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep3, &dxl_error);
-            // L5: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep3, &dxl_error);
+                // Second Legs: Femur
+                // L2: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep1, &dxl_error);
+                // L3: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep1, &dxl_error);
+                // L6: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep1, &dxl_error);
 
-            // Second Legs: Coxa
-            // L2: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep2, &dxl_error);
-            // L3: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep2, &dxl_error);
-            // L6: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep2, &dxl_error);
+                // First Legs: Tibia
+                // L1: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep3, &dxl_error);
+                // L4: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep3, &dxl_error);
+                // L5: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep3, &dxl_error);
 
-            // First Legs: Femur
-            // L1: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep3, &dxl_error);
-            // L4: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep3, &dxl_error);
-            // L5: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep3, &dxl_error);
+                // Second Legs: Tibia
+                // L2: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep1, &dxl_error);
+                // L3: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep1, &dxl_error);
+                // L6: Step1
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep1, &dxl_error);
 
-            // Second Legs: Femur
-            // L2: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep2, &dxl_error);
-            // L3: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep2, &dxl_error);
-            // L6: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep2, &dxl_error);
+                // ==================================================================================================
 
-            // First Legs: Tibia
-            // L1: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep3, &dxl_error);
-            // L4: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep3, &dxl_error);
-            // L5: Step3
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep3, &dxl_error);
+                delay(300);
 
-            // Second Legs: Tibia
-            // L2: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep2, &dxl_error);
-            // L3: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep2, &dxl_error);
-            // L6: Step2
-            dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep2, &dxl_error);
+                // ==================================================================================================
+                // Pattern[3]
+                // First Legs: Coxa
+                // L1: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 1, 30, LCoxaStep3, &dxl_error);
+                // L4: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 10, 30, RCoxaStep3, &dxl_error);
+                // L5: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 14, 30, LCoxaStep3, &dxl_error);
 
-            // ==================================================================================================
+                // Second Legs: Coxa
+                // L2: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 4, 30, RCoxaStep2, &dxl_error);
+                // L3: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 7, 30, LCoxaStep2, &dxl_error);
+                // L6: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 16, 30, RCoxaStep2, &dxl_error);
 
-            front++;
+                // First Legs: Femur
+                // L1: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 2, 30, LFemurStep3, &dxl_error);
+                // L4: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 11, 30, RFemurStep3, &dxl_error);
+                // L5: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 13, 30, LFemurStep3, &dxl_error);
+
+                // Second Legs: Femur
+                // L2: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 5, 30, RFemurStep2, &dxl_error);
+                // L3: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 8, 30, LFemurStep2, &dxl_error);
+                // L6: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 17, 30, RFemurStep2, &dxl_error);
+
+                // First Legs: Tibia
+                // L1: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 3, 30, LTibiaStep3, &dxl_error);
+                // L4: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 12, 30, RTibiaStep3, &dxl_error);
+                // L5: Step3
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 15, 30, LTibiaStep3, &dxl_error);
+
+                // Second Legs: Tibia
+                // L2: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 6, 30, RTibiaStep2, &dxl_error);
+                // L3: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 9, 30, LTibiaStep2, &dxl_error);
+                // L6: Step2
+                dxl_comm_result = packetHandler->write4ByteTxRx(portHandler, 18, 30, RTibiaStep2, &dxl_error);
+
+                // ==================================================================================================
+
+                front++;
+            }
         }
     }
 
