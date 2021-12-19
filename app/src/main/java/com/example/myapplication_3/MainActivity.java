@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothStatus = (ImageView)findViewById(R.id.bluetoothstatus);
         direction = (ImageView)findViewById(R.id.direction);
-        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
-//        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
+//        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
+        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (ImageButton)findViewById(R.id.btnConnect);
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-//                    mTvReceiveData.setText(readMessage);
+                    mTvReceiveData.setText(readMessage);
                     String[] array = readMessage.split(",");
                     temp.setText(array[0].concat("C"));
                     humd.setText(array[1].concat("%"));
@@ -249,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
     }
     // 블루투스 켜기
     void bluetoothOn() {
@@ -259,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             if (mBluetoothAdapter.isEnabled()) { // 블루투스가 활성화되어있다면
                 Toast.makeText(getApplicationContext(), "블루투스가 이미 활성화 되어 있습니다.", Toast.LENGTH_LONG).show();
-                mTvBluetoothStatus.setText("활성화");
             }
             else { // 블루투스가 활성화되어있지 않다면
                 Toast.makeText(getApplicationContext(), "블루투스가 활성화 되어 있지 않습니다.", Toast.LENGTH_LONG).show();
@@ -272,8 +270,7 @@ public class MainActivity extends AppCompatActivity {
     void bluetoothOff() {
         if (mBluetoothAdapter.isEnabled()) { // 블루투스가 켜져 있다면
             mBluetoothAdapter.disable();
-            Toast.makeText(getApplicationContext(), "블루투스가 비활성화 되었습니다.", Toast.LENGTH_SHORT).show();
-            mTvBluetoothStatus.setText("비활성화");
+            Toast.makeText(getApplicationContext(), "블루투스 비활성화", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(getApplicationContext(), "블루투스가 이미 비활성화 되어 있습니다.", Toast.LENGTH_SHORT).show();
@@ -284,12 +281,10 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case BT_REQUEST_ENABLE:
                 if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
-                    Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
-                    mTvBluetoothStatus.setText("활성화");
+                    Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_SHORT).show();
 
                 } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
                     Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
-                    mTvBluetoothStatus.setText("비활성화");
                     bluetoothStatus.setImageDrawable(getResources().getDrawable(R.drawable.bluetooth_off));
                 }
                 break;
