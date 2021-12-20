@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (ImageButton)findViewById(R.id.btnConnect);
-//        mBtnSendData = (Button)findViewById(R.id.btnSendData);
+
 
         btnUp=(ImageButton)findViewById(R.id.btnUp);
         btnDown=(ImageButton)findViewById(R.id.btnDown);
@@ -176,14 +176,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }));
-//        btnStop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(mThreadConnectedBluetooth != null){
-//                    mThreadConnectedBluetooth.write("5");
-//                }
-//            }
-//        });
+
 
         // 햇빛찾기 버튼 눌렀을 때
         btnSun.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     String[] array = readMessage.split(",");
                     if(array[2]=="0"){
                         if(mBluetoothHandler != null){
-                            //mBluetoothHandler.removeCallbacksAndMessages(null);
+                            mBluetoothHandler.removeCallbacksAndMessages(null);
                         }
                     }
 
@@ -345,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
                     bytes = mmInStream.available();
                     if (bytes != 0) { // 송신된 데이터가 존재한다면
-                        SystemClock.sleep(1000);
+                        SystemClock.sleep(1000); // 1초마다 받아오기
                         bytes = mmInStream.available();
                         bytes = mmInStream.read(buffer, 0, bytes); // 데이터 읽어오기
                         mBluetoothHandler.obtainMessage(BT_MESSAGE_READ, bytes, -1, buffer).sendToTarget();
