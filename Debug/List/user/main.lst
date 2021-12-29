@@ -1,0 +1,853 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V9.10.2.313/W64 for ARM         08/Nov/2021  12:56:30
+# Copyright 1999-2021 IAR Systems AB.
+#
+#    Cpu mode          =  thumb
+#    Endian            =  little
+#    Source file       =  C:\Users\juhyeonlee\Desktop\Embedded\user\main.c
+#    Command line      =
+#        -f C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\user\main.o.rsp
+#        (C:\Users\juhyeonlee\Desktop\Embedded\user\main.c -D
+#        USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\user -o
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\user --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --no_clustering
+#        --no_scheduling --debug --endian=little --cpu=Cortex-M3 -e --fpu=None
+#        --dlib_config "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\inc\c\DLib_Config_Normal.h" -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\inc\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\ -Ol -I
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\CMSIS\Core\Include\\" -I "C:\Program Files\IAR
+#        Systems\Embedded Workbench 9.0\arm\CMSIS\DSP\Include\\")
+#        --dependencies=n
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\user\main.o.d
+#    Locale            =  C
+#    List file         =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\user\main.lst
+#    Object file       =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\user\main.o
+#    Runtime model:       
+#      __SystemLibrary =  DLib
+#      __dlib_version  =  6
+#      __size_limit    =  32768|ARM.EW.LINKER
+#
+###############################################################################
+
+C:\Users\juhyeonlee\Desktop\Embedded\user\main.c
+      1          #include "stm32f10x.h"
+
+   \                                 In section .text, align 4, keep-with-next
+   \   static __softfp void __NVIC_EnableIRQ(IRQn_Type)
+   \                     __NVIC_EnableIRQ: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+   \        0x2   0xB249             SXTB     R1,R1
+   \        0x4   0x2900             CMP      R1,#+0
+   \        0x6   0xD409             BMI.N    ??__NVIC_EnableIRQ_0
+   \        0x8   0x2201             MOVS     R2,#+1
+   \        0xA   0xF010 0x011F      ANDS     R1,R0,#0x1F
+   \        0xE   0x408A             LSLS     R2,R2,R1
+   \       0x10   0x.... 0x....      LDR.W    R1,??DataTable3_3
+   \       0x14   0xB240             SXTB     R0,R0
+   \       0x16   0x0940             LSRS     R0,R0,#+5
+   \       0x18   0xF841 0x2020      STR      R2,[R1, R0, LSL #+2]
+   \                     ??__NVIC_EnableIRQ_0: (+1)
+   \       0x1C   0x4770             BX       LR
+      2          #include "stm32f10x_exti.h"
+      3          #include "stm32f10x_gpio.h"
+      4          #include "stm32f10x_rcc.h"
+      5          #include "stm32f10x_adc.h"
+      6          #include "stm32f10x_usart.h"
+      7          #include "misc.h"
+      8          #include "lcd.h"
+      9          #include "touch.h"
+     10          
+
+   \                                 In section .bss, align 2
+     11          uint16_t led_on;
+   \                     led_on:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     12          uint16_t led_1;
+   \                     led_1:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     13          uint16_t led_2;
+   \                     led_2:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     14          uint16_t count;
+   \                     count:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     15          uint16_t flag;
+   \                     flag:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     16          uint16_t led_1_flag;
+   \                     led_1_flag:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     17          uint16_t led_2_flag;
+   \                     led_2_flag:
+   \        0x0                      DS8 2
+     18          
+
+   \                                 In section .text, align 2, keep-with-next
+     19          void RCC_Configure(void){
+   \                     RCC_Configure: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+     20              /* Alternate Function IO clock enable */
+     21              RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+   \        0x2   0x2101             MOVS     R1,#+1
+   \        0x4   0x2001             MOVS     R0,#+1
+   \        0x6   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     22              
+     23              /* LED port clock enable */
+     24              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+   \        0xA   0x2101             MOVS     R1,#+1
+   \        0xC   0x2020             MOVS     R0,#+32
+   \        0xE   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     25              
+     26              /* TIM2 clock enable*/
+     27              RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+   \       0x12   0x2101             MOVS     R1,#+1
+   \       0x14   0x2001             MOVS     R0,#+1
+   \       0x16   0x.... 0x....      BL       RCC_APB1PeriphClockCmd
+     28          }
+   \       0x1A   0xBD01             POP      {R0,PC}
+     29          
+
+   \                                 In section .text, align 2, keep-with-next
+     30          void GPIO_Configure(void){
+   \                     GPIO_Configure: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+     31              //LED1 PD2
+     32              GPIO_InitTypeDef GPIO_InitStructure;
+     33              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+   \        0x2   0x2004             MOVS     R0,#+4
+   \        0x4   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     34              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \        0x8   0x2003             MOVS     R0,#+3
+   \        0xA   0xF88D 0x0002      STRB     R0,[SP, #+2]
+     35              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \        0xE   0x2010             MOVS     R0,#+16
+   \       0x10   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     36              GPIO_Init(GPIOD, &GPIO_InitStructure);
+   \       0x14   0x4669             MOV      R1,SP
+   \       0x16   0x.... 0x....      LDR.W    R0,??DataTable3_4
+   \       0x1A   0x.... 0x....      BL       GPIO_Init
+     37              
+     38              //LED2 PD3
+     39              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+   \       0x1E   0x2008             MOVS     R0,#+8
+   \       0x20   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     40              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \       0x24   0x2003             MOVS     R0,#+3
+   \       0x26   0xF88D 0x0002      STRB     R0,[SP, #+2]
+     41              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \       0x2A   0x2010             MOVS     R0,#+16
+   \       0x2C   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     42              GPIO_Init(GPIOD, &GPIO_InitStructure);
+   \       0x30   0x4669             MOV      R1,SP
+   \       0x32   0x....             LDR.N    R0,??DataTable3_4
+   \       0x34   0x.... 0x....      BL       GPIO_Init
+     43          }
+   \       0x38   0xBD01             POP      {R0,PC}
+     44          
+
+   \                                 In section .text, align 2, keep-with-next
+     45          void TIM2_Configure(void){
+   \                     TIM2_Configure: (+1)
+   \        0x0   0xB5E0             PUSH     {R5-R7,LR}
+     46              //1초마다 count되도록 설정
+     47              TIM_TimeBaseInitTypeDef TIM_InitStructure;
+     48              //TIM2 ENABLE
+     49              TIM_Cmd(TIM2, ENABLE);
+   \        0x2   0x2101             MOVS     R1,#+1
+   \        0x4   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \        0x8   0x.... 0x....      BL       TIM_Cmd
+     50              //AutoreloadRegister ENABLE
+     51              TIM_ARRPreloadConfig(TIM2, ENABLE);
+   \        0xC   0x2101             MOVS     R1,#+1
+   \        0xE   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \       0x12   0x.... 0x....      BL       TIM_ARRPreloadConfig
+     52              
+     53              TIM_InitStructure.TIM_Prescaler = 7200-1;
+   \       0x16   0xF641 0x401F      MOVW     R0,#+7199
+   \       0x1A   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     54              TIM_InitStructure.TIM_Period = 10000-1;
+   \       0x1E   0xF242 0x700F      MOVW     R0,#+9999
+   \       0x22   0xF8AD 0x0004      STRH     R0,[SP, #+4]
+     55              TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+   \       0x26   0x2000             MOVS     R0,#+0
+   \       0x28   0xF8AD 0x0002      STRH     R0,[SP, #+2]
+     56              TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+   \       0x2C   0x2000             MOVS     R0,#+0
+   \       0x2E   0xF8AD 0x0006      STRH     R0,[SP, #+6]
+     57              TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
+   \       0x32   0x4669             MOV      R1,SP
+   \       0x34   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \       0x38   0x.... 0x....      BL       TIM_TimeBaseInit
+     58          }
+   \       0x3C   0xBD07             POP      {R0-R2,PC}
+     59          
+
+   \                                 In section .text, align 2, keep-with-next
+     60          void NVIC_Configure(void){
+   \                     NVIC_Configure: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+     61              //TIM2 interrrupt
+     62              NVIC_InitTypeDef NVIC_InitStructure;
+     63              
+     64              NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+   \        0x2   0xF44F 0x60A0      MOV      R0,#+1280
+   \        0x6   0x.... 0x....      BL       NVIC_PriorityGroupConfig
+     65              
+     66              NVIC_EnableIRQ(TIM2_IRQn);
+   \        0xA   0x201C             MOVS     R0,#+28
+   \        0xC   0x.... 0x....      BL       __NVIC_EnableIRQ
+     67              NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+   \       0x10   0x201C             MOVS     R0,#+28
+   \       0x12   0xF88D 0x0000      STRB     R0,[SP, #+0]
+     68              NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+   \       0x16   0x2000             MOVS     R0,#+0
+   \       0x18   0xF88D 0x0001      STRB     R0,[SP, #+1]
+     69              NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+   \       0x1C   0x2000             MOVS     R0,#+0
+   \       0x1E   0xF88D 0x0002      STRB     R0,[SP, #+2]
+     70              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+   \       0x22   0x2001             MOVS     R0,#+1
+   \       0x24   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     71              NVIC_Init(&NVIC_InitStructure);
+   \       0x28   0x4668             MOV      R0,SP
+   \       0x2A   0x.... 0x....      BL       NVIC_Init
+     72              
+     73              
+     74              TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
+   \       0x2E   0x2201             MOVS     R2,#+1
+   \       0x30   0x2101             MOVS     R1,#+1
+   \       0x32   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \       0x36   0x.... 0x....      BL       TIM_ITConfig
+     75          }
+   \       0x3A   0xBD01             POP      {R0,PC}
+     76          
+
+   \                                 In section .text, align 2, keep-with-next
+     77          void TIM2_IRQHandler(){
+   \                     TIM2_IRQHandler: (+1)
+   \        0x0   0xB5E0             PUSH     {R5-R7,LR}
+     78              count++;
+   \        0x2   0x....             LDR.N    R0,??DataTable3_5
+   \        0x4   0x8800             LDRH     R0,[R0, #+0]
+   \        0x6   0x1C40             ADDS     R0,R0,#+1
+   \        0x8   0x....             LDR.N    R1,??DataTable3_5
+   \        0xA   0x8008             STRH     R0,[R1, #+0]
+     79              if(flag == 1){
+   \        0xC   0x....             LDR.N    R0,??DataTable3_6
+   \        0xE   0x8800             LDRH     R0,[R0, #+0]
+   \       0x10   0x2801             CMP      R0,#+1
+   \       0x12   0xD11B             BNE.N    ??TIM2_IRQHandler_0
+     80                  led_1++;
+   \       0x14   0x....             LDR.N    R0,??DataTable3_7
+   \       0x16   0x8800             LDRH     R0,[R0, #+0]
+   \       0x18   0x1C40             ADDS     R0,R0,#+1
+   \       0x1A   0x....             LDR.N    R1,??DataTable3_7
+   \       0x1C   0x8008             STRH     R0,[R1, #+0]
+     81                  led_1 = led_1 % 2;
+   \       0x1E   0x....             LDR.N    R0,??DataTable3_7
+   \       0x20   0x8800             LDRH     R0,[R0, #+0]
+   \       0x22   0x2102             MOVS     R1,#+2
+   \       0x24   0xFB90 0xF2F1      SDIV     R2,R0,R1
+   \       0x28   0xFB01 0x0012      MLS      R0,R1,R2,R0
+   \       0x2C   0x....             LDR.N    R1,??DataTable3_7
+   \       0x2E   0x8008             STRH     R0,[R1, #+0]
+     82                  led_2++;
+   \       0x30   0x....             LDR.N    R0,??DataTable3_8
+   \       0x32   0x8800             LDRH     R0,[R0, #+0]
+   \       0x34   0x1C40             ADDS     R0,R0,#+1
+   \       0x36   0x....             LDR.N    R1,??DataTable3_8
+   \       0x38   0x8008             STRH     R0,[R1, #+0]
+     83                  led_2 = (led_2 % 5);
+   \       0x3A   0x....             LDR.N    R0,??DataTable3_8
+   \       0x3C   0x8800             LDRH     R0,[R0, #+0]
+   \       0x3E   0x2105             MOVS     R1,#+5
+   \       0x40   0xFB90 0xF2F1      SDIV     R2,R0,R1
+   \       0x44   0xFB01 0x0012      MLS      R0,R1,R2,R0
+   \       0x48   0x....             LDR.N    R1,??DataTable3_8
+   \       0x4A   0x8008             STRH     R0,[R1, #+0]
+     84              }
+     85              if(flag == 0){
+   \                     ??TIM2_IRQHandler_0: (+1)
+   \       0x4C   0x....             LDR.N    R0,??DataTable3_6
+   \       0x4E   0x8800             LDRH     R0,[R0, #+0]
+   \       0x50   0x2800             CMP      R0,#+0
+   \       0x52   0xD10A             BNE.N    ??TIM2_IRQHandler_1
+     86                  LCD_ShowString(20,40,"OFF",RED,WHITE);
+   \       0x54   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0x58   0x9000             STR      R0,[SP, #+0]
+   \       0x5A   0xF44F 0x4378      MOV      R3,#+63488
+   \       0x5E   0x....             ADR.N    R2,??DataTable3
+   \       0x60   0x2128             MOVS     R1,#+40
+   \       0x62   0x2014             MOVS     R0,#+20
+   \       0x64   0x.... 0x....      BL       LCD_ShowString
+   \       0x68   0xE01F             B.N      ??TIM2_IRQHandler_2
+     87              }
+     88              else if(flag == 1){
+   \                     ??TIM2_IRQHandler_1: (+1)
+   \       0x6A   0x....             LDR.N    R0,??DataTable3_6
+   \       0x6C   0x8800             LDRH     R0,[R0, #+0]
+   \       0x6E   0x2801             CMP      R0,#+1
+   \       0x70   0xD11B             BNE.N    ??TIM2_IRQHandler_2
+     89                  LCD_ShowString(20,40,"ON ",RED,WHITE);
+   \       0x72   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0x76   0x9000             STR      R0,[SP, #+0]
+   \       0x78   0xF44F 0x4378      MOV      R3,#+63488
+   \       0x7C   0x....             ADR.N    R2,??DataTable3_1
+   \       0x7E   0x2128             MOVS     R1,#+40
+   \       0x80   0x2014             MOVS     R0,#+20
+   \       0x82   0x.... 0x....      BL       LCD_ShowString
+     90                  if(led_2 == 4){
+   \       0x86   0x....             LDR.N    R0,??DataTable3_8
+   \       0x88   0x8800             LDRH     R0,[R0, #+0]
+   \       0x8A   0x2804             CMP      R0,#+4
+   \       0x8C   0xD10D             BNE.N    ??TIM2_IRQHandler_2
+     91                      led_2_flag++;
+   \       0x8E   0x....             LDR.N    R0,??DataTable3_9
+   \       0x90   0x8800             LDRH     R0,[R0, #+0]
+   \       0x92   0x1C40             ADDS     R0,R0,#+1
+   \       0x94   0x....             LDR.N    R1,??DataTable3_9
+   \       0x96   0x8008             STRH     R0,[R1, #+0]
+     92                      led_2_flag = led_2_flag % 2;
+   \       0x98   0x....             LDR.N    R0,??DataTable3_9
+   \       0x9A   0x8800             LDRH     R0,[R0, #+0]
+   \       0x9C   0x2102             MOVS     R1,#+2
+   \       0x9E   0xFB90 0xF2F1      SDIV     R2,R0,R1
+   \       0xA2   0xFB01 0x0012      MLS      R0,R1,R2,R0
+   \       0xA6   0x....             LDR.N    R1,??DataTable3_9
+   \       0xA8   0x8008             STRH     R0,[R1, #+0]
+     93                  }
+     94              }
+     95              
+     96              if(led_1 == 1){
+   \                     ??TIM2_IRQHandler_2: (+1)
+   \       0xAA   0x....             LDR.N    R0,??DataTable3_7
+   \       0xAC   0x8800             LDRH     R0,[R0, #+0]
+   \       0xAE   0x2801             CMP      R0,#+1
+   \       0xB0   0xD10F             BNE.N    ??TIM2_IRQHandler_3
+     97                  GPIO_SetBits(GPIOD,GPIO_Pin_2);
+   \       0xB2   0x2104             MOVS     R1,#+4
+   \       0xB4   0x....             LDR.N    R0,??DataTable3_4
+   \       0xB6   0x.... 0x....      BL       GPIO_SetBits
+     98                  LCD_ShowString(80,280,"ON ",RED,WHITE);
+   \       0xBA   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0xBE   0x9000             STR      R0,[SP, #+0]
+   \       0xC0   0xF44F 0x4378      MOV      R3,#+63488
+   \       0xC4   0x....             ADR.N    R2,??DataTable3_1
+   \       0xC6   0xF44F 0x718C      MOV      R1,#+280
+   \       0xCA   0x2050             MOVS     R0,#+80
+   \       0xCC   0x.... 0x....      BL       LCD_ShowString
+   \       0xD0   0xE012             B.N      ??TIM2_IRQHandler_4
+     99              }
+    100              else if(led_1 == 0){
+   \                     ??TIM2_IRQHandler_3: (+1)
+   \       0xD2   0x....             LDR.N    R0,??DataTable3_7
+   \       0xD4   0x8800             LDRH     R0,[R0, #+0]
+   \       0xD6   0x2800             CMP      R0,#+0
+   \       0xD8   0xD10E             BNE.N    ??TIM2_IRQHandler_4
+    101                  GPIO_ResetBits(GPIOD,GPIO_Pin_2);
+   \       0xDA   0x2104             MOVS     R1,#+4
+   \       0xDC   0x....             LDR.N    R0,??DataTable3_4
+   \       0xDE   0x.... 0x....      BL       GPIO_ResetBits
+    102                  LCD_ShowString(80,280,"OFF",RED,WHITE);
+   \       0xE2   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0xE6   0x9000             STR      R0,[SP, #+0]
+   \       0xE8   0xF44F 0x4378      MOV      R3,#+63488
+   \       0xEC   0x....             ADR.N    R2,??DataTable3
+   \       0xEE   0xF44F 0x718C      MOV      R1,#+280
+   \       0xF2   0x2050             MOVS     R0,#+80
+   \       0xF4   0x.... 0x....      BL       LCD_ShowString
+    103              }
+    104              
+    105              if(led_2_flag == 1){
+   \                     ??TIM2_IRQHandler_4: (+1)
+   \       0xF8   0x....             LDR.N    R0,??DataTable3_9
+   \       0xFA   0x8800             LDRH     R0,[R0, #+0]
+   \       0xFC   0x2801             CMP      R0,#+1
+   \       0xFE   0xD10F             BNE.N    ??TIM2_IRQHandler_5
+    106                  GPIO_SetBits(GPIOD,GPIO_Pin_3);
+   \      0x100   0x2108             MOVS     R1,#+8
+   \      0x102   0x....             LDR.N    R0,??DataTable3_4
+   \      0x104   0x.... 0x....      BL       GPIO_SetBits
+    107                  LCD_ShowString(200,280,"ON ",RED,WHITE);
+   \      0x108   0xF64F 0x70FF      MOVW     R0,#+65535
+   \      0x10C   0x9000             STR      R0,[SP, #+0]
+   \      0x10E   0xF44F 0x4378      MOV      R3,#+63488
+   \      0x112   0x....             ADR.N    R2,??DataTable3_1
+   \      0x114   0xF44F 0x718C      MOV      R1,#+280
+   \      0x118   0x20C8             MOVS     R0,#+200
+   \      0x11A   0x.... 0x....      BL       LCD_ShowString
+   \      0x11E   0xE012             B.N      ??TIM2_IRQHandler_6
+    108              }
+    109              else if(led_2_flag == 0){
+   \                     ??TIM2_IRQHandler_5: (+1)
+   \      0x120   0x....             LDR.N    R0,??DataTable3_9
+   \      0x122   0x8800             LDRH     R0,[R0, #+0]
+   \      0x124   0x2800             CMP      R0,#+0
+   \      0x126   0xD10E             BNE.N    ??TIM2_IRQHandler_6
+    110                  GPIO_ResetBits(GPIOD,GPIO_Pin_3);
+   \      0x128   0x2108             MOVS     R1,#+8
+   \      0x12A   0x....             LDR.N    R0,??DataTable3_4
+   \      0x12C   0x.... 0x....      BL       GPIO_ResetBits
+    111                  LCD_ShowString(200,280,"OFF",RED,WHITE);
+   \      0x130   0xF64F 0x70FF      MOVW     R0,#+65535
+   \      0x134   0x9000             STR      R0,[SP, #+0]
+   \      0x136   0xF44F 0x4378      MOV      R3,#+63488
+   \      0x13A   0x....             ADR.N    R2,??DataTable3
+   \      0x13C   0xF44F 0x718C      MOV      R1,#+280
+   \      0x140   0x20C8             MOVS     R0,#+200
+   \      0x142   0x.... 0x....      BL       LCD_ShowString
+    112              }
+    113              
+    114              
+    115              LCD_ShowNum(150,220,count,4,RED,WHITE);
+   \                     ??TIM2_IRQHandler_6: (+1)
+   \      0x146   0xF64F 0x70FF      MOVW     R0,#+65535
+   \      0x14A   0x9001             STR      R0,[SP, #+4]
+   \      0x14C   0xF44F 0x4078      MOV      R0,#+63488
+   \      0x150   0x9000             STR      R0,[SP, #+0]
+   \      0x152   0x2304             MOVS     R3,#+4
+   \      0x154   0x....             LDR.N    R0,??DataTable3_5
+   \      0x156   0x8802             LDRH     R2,[R0, #+0]
+   \      0x158   0x21DC             MOVS     R1,#+220
+   \      0x15A   0x2096             MOVS     R0,#+150
+   \      0x15C   0x.... 0x....      BL       LCD_ShowNum
+    116              
+    117              TIM_ClearITPendingBit(TIM2,TIM_IT_Update);
+   \      0x160   0x2101             MOVS     R1,#+1
+   \      0x162   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \      0x166   0x.... 0x....      BL       TIM_ClearITPendingBit
+    118          }
+   \      0x16A   0xBD07             POP      {R0-R2,PC}
+    119          
+    120          //메인문 예시
+
+   \                                 In section .text, align 2, keep-with-next
+    121          int main() {
+   \                     main: (+1)
+   \        0x0   0xB51F             PUSH     {R0-R4,LR}
+    122              uint16_t recSize = 30;
+   \        0x2   0x241E             MOVS     R4,#+30
+    123              uint16_t x = 0, y = 0;
+   \        0x4   0x2000             MOVS     R0,#+0
+   \        0x6   0xF8AD 0x000A      STRH     R0,[SP, #+10]
+   \        0xA   0x2000             MOVS     R0,#+0
+   \        0xC   0xF8AD 0x0008      STRH     R0,[SP, #+8]
+    124              uint16_t pix_x = 0,pix_y = 0;
+   \       0x10   0x2000             MOVS     R0,#+0
+   \       0x12   0xF8AD 0x0006      STRH     R0,[SP, #+6]
+   \       0x16   0x2000             MOVS     R0,#+0
+   \       0x18   0xF8AD 0x0004      STRH     R0,[SP, #+4]
+    125              led_on = 0;
+   \       0x1C   0x2000             MOVS     R0,#+0
+   \       0x1E   0x....             LDR.N    R1,??DataTable3_10
+   \       0x20   0x8008             STRH     R0,[R1, #+0]
+    126              led_1 = 0;
+   \       0x22   0x2000             MOVS     R0,#+0
+   \       0x24   0x....             LDR.N    R1,??DataTable3_7
+   \       0x26   0x8008             STRH     R0,[R1, #+0]
+    127              led_2 = 0;
+   \       0x28   0x2000             MOVS     R0,#+0
+   \       0x2A   0x....             LDR.N    R1,??DataTable3_8
+   \       0x2C   0x8008             STRH     R0,[R1, #+0]
+    128              count = 0;
+   \       0x2E   0x2000             MOVS     R0,#+0
+   \       0x30   0x....             LDR.N    R1,??DataTable3_5
+   \       0x32   0x8008             STRH     R0,[R1, #+0]
+    129              flag = 0;
+   \       0x34   0x2000             MOVS     R0,#+0
+   \       0x36   0x....             LDR.N    R1,??DataTable3_6
+   \       0x38   0x8008             STRH     R0,[R1, #+0]
+    130              led_1_flag = 0;
+   \       0x3A   0x2000             MOVS     R0,#+0
+   \       0x3C   0x....             LDR.N    R1,??DataTable3_11
+   \       0x3E   0x8008             STRH     R0,[R1, #+0]
+    131              led_2_flag = 0;
+   \       0x40   0x2000             MOVS     R0,#+0
+   \       0x42   0x....             LDR.N    R1,??DataTable3_9
+   \       0x44   0x8008             STRH     R0,[R1, #+0]
+    132              // LCD 관련 설정은 LCD_Init에 구현되어 있으므로 여기서 할 필요 없음
+    133              SystemInit();
+   \       0x46   0x.... 0x....      BL       SystemInit
+    134              RCC_Configure();
+   \       0x4A   0x.... 0x....      BL       RCC_Configure
+    135              GPIO_Configure();
+   \       0x4E   0x.... 0x....      BL       GPIO_Configure
+    136              NVIC_Configure();
+   \       0x52   0x.... 0x....      BL       NVIC_Configure
+    137              TIM2_Configure();
+   \       0x56   0x.... 0x....      BL       TIM2_Configure
+    138              
+    139              // ------------------------------------
+    140          
+    141              LCD_Init();
+   \       0x5A   0x.... 0x....      BL       LCD_Init
+    142              Touch_Configuration();
+   \       0x5E   0x.... 0x....      BL       Touch_Configuration
+    143              Touch_Adjust();
+   \       0x62   0x.... 0x....      BL       Touch_Adjust
+    144              LCD_Clear(WHITE);
+   \       0x66   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0x6A   0x.... 0x....      BL       LCD_Clear
+    145              
+    146              
+    147              while(1){
+    148                  /*TEAM NAME*/
+    149                  LCD_ShowString(20,20,"MON_TEAM03",BLUE,WHITE);
+   \                     ??main_0: (+1)
+   \       0x6E   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0x72   0x9000             STR      R0,[SP, #+0]
+   \       0x74   0x231F             MOVS     R3,#+31
+   \       0x76   0x....             LDR.N    R2,??DataTable3_12
+   \       0x78   0x2114             MOVS     R1,#+20
+   \       0x7A   0x2014             MOVS     R0,#+20
+   \       0x7C   0x.... 0x....      BL       LCD_ShowString
+    150                  
+    151                  /*Button*/
+    152                  LCD_ShowString(40,150,"BUT",RED,WHITE);
+   \       0x80   0xF64F 0x70FF      MOVW     R0,#+65535
+   \       0x84   0x9000             STR      R0,[SP, #+0]
+   \       0x86   0xF44F 0x4378      MOV      R3,#+63488
+   \       0x8A   0x....             ADR.N    R2,??DataTable3_2
+   \       0x8C   0x2196             MOVS     R1,#+150
+   \       0x8E   0x2028             MOVS     R0,#+40
+   \       0x90   0x.... 0x....      BL       LCD_ShowString
+    153                  LCD_DrawRectangle(40-recSize,150-recSize,40+recSize,150+recSize);
+   \       0x94   0xF114 0x0396      ADDS     R3,R4,#+150
+   \       0x98   0xB29B             UXTH     R3,R3
+   \       0x9A   0xF114 0x0228      ADDS     R2,R4,#+40
+   \       0x9E   0xB292             UXTH     R2,R2
+   \       0xA0   0xF1D4 0x0196      RSBS     R1,R4,#+150
+   \       0xA4   0xB289             UXTH     R1,R1
+   \       0xA6   0xF1D4 0x0028      RSBS     R0,R4,#+40
+   \       0xAA   0xB280             UXTH     R0,R0
+   \       0xAC   0x.... 0x....      BL       LCD_DrawRectangle
+    154                  Touch_GetXY(&x,&y,1);
+   \       0xB0   0x2201             MOVS     R2,#+1
+   \       0xB2   0xA902             ADD      R1,SP,#+8
+   \       0xB4   0xF10D 0x000A      ADD      R0,SP,#+10
+   \       0xB8   0x.... 0x....      BL       Touch_GetXY
+    155                  Convert_Pos(x,y,&pix_x,&pix_y);
+   \       0xBC   0xAB01             ADD      R3,SP,#+4
+   \       0xBE   0xF10D 0x0206      ADD      R2,SP,#+6
+   \       0xC2   0xF8BD 0x1008      LDRH     R1,[SP, #+8]
+   \       0xC6   0xF8BD 0x000A      LDRH     R0,[SP, #+10]
+   \       0xCA   0x.... 0x....      BL       Convert_Pos
+    156                  if((10<=pix_x && pix_x <= 70) && (120<=pix_y && pix_y<=180))
+   \       0xCE   0xF8BD 0x0006      LDRH     R0,[SP, #+6]
+   \       0xD2   0x380A             SUBS     R0,R0,#+10
+   \       0xD4   0x283D             CMP      R0,#+61
+   \       0xD6   0xD21E             BCS.N    ??main_1
+   \       0xD8   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \       0xDC   0x3878             SUBS     R0,R0,#+120
+   \       0xDE   0x283D             CMP      R0,#+61
+   \       0xE0   0xD219             BCS.N    ??main_1
+    157                  {
+    158                      
+    159                      flag++;
+   \       0xE2   0x....             LDR.N    R0,??DataTable3_6
+   \       0xE4   0x8800             LDRH     R0,[R0, #+0]
+   \       0xE6   0x1C40             ADDS     R0,R0,#+1
+   \       0xE8   0x....             LDR.N    R1,??DataTable3_6
+   \       0xEA   0x8008             STRH     R0,[R1, #+0]
+    160                      flag = flag%2;
+   \       0xEC   0x....             LDR.N    R0,??DataTable3_6
+   \       0xEE   0x8800             LDRH     R0,[R0, #+0]
+   \       0xF0   0x2102             MOVS     R1,#+2
+   \       0xF2   0xFB90 0xF2F1      SDIV     R2,R0,R1
+   \       0xF6   0xFB01 0x0012      MLS      R0,R1,R2,R0
+   \       0xFA   0x....             LDR.N    R1,??DataTable3_6
+   \       0xFC   0x8008             STRH     R0,[R1, #+0]
+    161                      pix_x = 0;
+   \       0xFE   0x2000             MOVS     R0,#+0
+   \      0x100   0xF8AD 0x0006      STRH     R0,[SP, #+6]
+    162                      pix_y = 0;
+   \      0x104   0x2000             MOVS     R0,#+0
+   \      0x106   0xF8AD 0x0004      STRH     R0,[SP, #+4]
+    163                      x=0;
+   \      0x10A   0x2000             MOVS     R0,#+0
+   \      0x10C   0xF8AD 0x000A      STRH     R0,[SP, #+10]
+    164                      y=0;
+   \      0x110   0x2000             MOVS     R0,#+0
+   \      0x112   0xF8AD 0x0008      STRH     R0,[SP, #+8]
+    165                      
+    166                  }
+    167                  /*COUNT*/
+    168                  LCD_ShowString(20,220,"COUNT",RED,WHITE);
+   \                     ??main_1: (+1)
+   \      0x116   0xF64F 0x70FF      MOVW     R0,#+65535
+   \      0x11A   0x9000             STR      R0,[SP, #+0]
+   \      0x11C   0xF44F 0x4378      MOV      R3,#+63488
+   \      0x120   0x....             LDR.N    R2,??DataTable3_13
+   \      0x122   0x21DC             MOVS     R1,#+220
+   \      0x124   0x2014             MOVS     R0,#+20
+   \      0x126   0x.... 0x....      BL       LCD_ShowString
+    169                  
+    170                  /*LED*/
+    171                  LCD_ShowString(10,280,"LED 1 :",RED,WHITE);
+   \      0x12A   0xF64F 0x70FF      MOVW     R0,#+65535
+   \      0x12E   0x9000             STR      R0,[SP, #+0]
+   \      0x130   0xF44F 0x4378      MOV      R3,#+63488
+   \      0x134   0x....             LDR.N    R2,??DataTable3_14
+   \      0x136   0xF44F 0x718C      MOV      R1,#+280
+   \      0x13A   0x200A             MOVS     R0,#+10
+   \      0x13C   0x.... 0x....      BL       LCD_ShowString
+    172                  LCD_ShowString(120,280,"LED 2 :",RED,WHITE);
+   \      0x140   0xF64F 0x70FF      MOVW     R0,#+65535
+   \      0x144   0x9000             STR      R0,[SP, #+0]
+   \      0x146   0xF44F 0x4378      MOV      R3,#+63488
+   \      0x14A   0x....             LDR.N    R2,??DataTable3_15
+   \      0x14C   0xF44F 0x718C      MOV      R1,#+280
+   \      0x150   0x2078             MOVS     R0,#+120
+   \      0x152   0x.... 0x....      BL       LCD_ShowString
+   \      0x156   0xE78A             B.N      ??main_0
+    173              }
+    174          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3:
+   \        0x0   0x4F 0x46          DC8      "OFF"          
+
+   \              0x46 0x00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_1:
+   \        0x0   0x4F 0x4E          DC8      "ON "          
+
+   \              0x20 0x00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_2:
+   \        0x0   0x42 0x55          DC8      "BUT"          
+
+   \              0x54 0x00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_3:
+   \        0x0   0xE000'E100        DC32     0xe000e100
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_4:
+   \        0x0   0x4001'1400        DC32     0x40011400
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_5:
+   \        0x0   0x....'....        DC32     count
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_6:
+   \        0x0   0x....'....        DC32     flag
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_7:
+   \        0x0   0x....'....        DC32     led_1
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_8:
+   \        0x0   0x....'....        DC32     led_2
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_9:
+   \        0x0   0x....'....        DC32     led_2_flag
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_10:
+   \        0x0   0x....'....        DC32     led_on
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_11:
+   \        0x0   0x....'....        DC32     led_1_flag
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_12:
+   \        0x0   0x....'....        DC32     ?_2
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_13:
+   \        0x0   0x....'....        DC32     ?_4
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_14:
+   \        0x0   0x....'....        DC32     ?_5
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_15:
+   \        0x0   0x....'....        DC32     ?_6
+
+   \                                 In section .rodata, align 4
+   \        0x0   0x4F 0x46          DC8 "OFF"
+
+   \              0x46 0x00
+
+   \                                 In section .rodata, align 4
+   \        0x0   0x4F 0x4E          DC8 "ON "
+
+   \              0x20 0x00
+
+   \                                 In section .rodata, align 4
+   \                     ?_2:
+   \        0x0   0x4D 0x4F          DC8 "MON_TEAM03"
+
+   \              0x4E 0x5F    
+
+   \              0x54 0x45    
+
+   \              0x41 0x4D    
+
+   \              0x30 0x33    
+
+   \              0x00
+   \        0xB                      DS8 1
+
+   \                                 In section .rodata, align 4
+   \        0x0   0x42 0x55          DC8 "BUT"
+
+   \              0x54 0x00
+
+   \                                 In section .rodata, align 4
+   \                     ?_4:
+   \        0x0   0x43 0x4F          DC8 "COUNT"
+
+   \              0x55 0x4E    
+
+   \              0x54 0x00
+   \        0x6                      DS8 2
+
+   \                                 In section .rodata, align 4
+   \                     ?_5:
+   \        0x0   0x4C 0x45          DC8 "LED 1 :"
+
+   \              0x44 0x20    
+
+   \              0x31 0x20    
+
+   \              0x3A 0x00
+
+   \                                 In section .rodata, align 4
+   \                     ?_6:
+   \        0x0   0x4C 0x45          DC8 "LED 2 :"
+
+   \              0x44 0x20    
+
+   \              0x32 0x20    
+
+   \              0x3A 0x00
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   GPIO_Configure
+         8   -> GPIO_Init
+       8   NVIC_Configure
+         8   -> NVIC_Init
+         8   -> NVIC_PriorityGroupConfig
+         8   -> TIM_ITConfig
+         8   -> __NVIC_EnableIRQ
+       8   RCC_Configure
+         8   -> RCC_APB1PeriphClockCmd
+         8   -> RCC_APB2PeriphClockCmd
+      16   TIM2_Configure
+        16   -> TIM_ARRPreloadConfig
+        16   -> TIM_Cmd
+        16   -> TIM_TimeBaseInit
+      16   TIM2_IRQHandler
+        16   -> GPIO_ResetBits
+        16   -> GPIO_SetBits
+        16   -> LCD_ShowNum
+        16   -> LCD_ShowString
+        16   -> TIM_ClearITPendingBit
+       0   __NVIC_EnableIRQ
+      24   main
+        24   -> Convert_Pos
+        24   -> GPIO_Configure
+        24   -> LCD_Clear
+        24   -> LCD_DrawRectangle
+        24   -> LCD_Init
+        24   -> LCD_ShowString
+        24   -> NVIC_Configure
+        24   -> RCC_Configure
+        24   -> SystemInit
+        24   -> TIM2_Configure
+        24   -> Touch_Adjust
+        24   -> Touch_Configuration
+        24   -> Touch_GetXY
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable3
+       4  ??DataTable3_1
+       4  ??DataTable3_10
+       4  ??DataTable3_11
+       4  ??DataTable3_12
+       4  ??DataTable3_13
+       4  ??DataTable3_14
+       4  ??DataTable3_15
+       4  ??DataTable3_2
+       4  ??DataTable3_3
+       4  ??DataTable3_4
+       4  ??DataTable3_5
+       4  ??DataTable3_6
+       4  ??DataTable3_7
+       4  ??DataTable3_8
+       4  ??DataTable3_9
+       4  ?_0
+       4  ?_1
+      12  ?_2
+       4  ?_3
+       8  ?_4
+       8  ?_5
+       8  ?_6
+      58  GPIO_Configure
+      60  NVIC_Configure
+      28  RCC_Configure
+      62  TIM2_Configure
+     364  TIM2_IRQHandler
+      30  __NVIC_EnableIRQ
+       2  count
+       2  flag
+       2  led_1
+       2  led_1_flag
+       2  led_2
+       2  led_2_flag
+       2  led_on
+     344  main
+
+ 
+    14 bytes in section .bss
+    48 bytes in section .rodata
+ 1'010 bytes in section .text
+ 
+ 1'010 bytes of CODE  memory
+    48 bytes of CONST memory
+    14 bytes of DATA  memory
+
+Errors: none
+Warnings: none

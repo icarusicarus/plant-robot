@@ -1,0 +1,1480 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V9.10.2.313/W64 for ARM         03/Nov/2021  18:53:32
+# Copyright 1999-2021 IAR Systems AB.
+#
+#    Cpu mode                     =  thumb
+#    Endian                       =  little
+#    Source file                  =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\touch.c
+#    Command line                 =
+#        -f
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\touch.o.rsp
+#        (C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\touch.c -D
+#        USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\Libraries -o
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --no_clustering
+#        --no_scheduling --debug --endian=little --cpu=Cortex-M3 -e --fpu=None
+#        --dlib_config "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\inc\c\DLib_Config_Normal.h" -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\inc\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\ -Ol -I
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\CMSIS\Core\Include\\" -I "C:\Program Files\IAR
+#        Systems\Embedded Workbench 9.0\arm\CMSIS\DSP\Include\\")
+#        --dependencies=n
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\touch.o.d
+#    Locale                       =  C
+#    List file                    =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\Libraries\touch.lst
+#    Object file                  =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\touch.o
+#    Runtime model:                  
+#      __SystemLibrary            =  DLib
+#      __dlib_full_locale_support =  0
+#      __dlib_version             =  6
+#      __size_limit               =  32768|ARM.EW.LINKER
+#
+###############################################################################
+
+C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\touch.c
+      1          #include "touch.h"
+      2          
+      3          #include <stdlib.h>
+      4          #include <math.h>
+      5          
+      6          #include "stm32f10x.h"
+      7          #include "stm32f10x_rcc.h"
+      8          #include "lcd.h"
+      9          
+     10          /************************************
+     11          ** ADS_Write_Byte :
+     12          ** SPI Writing
+     13          ** Write 1 byte data 
+     14          ************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     15          void ADS_Write_Byte(uint8_t num)
+     16          {
+     17          	uint8_t count = 0;
+   \                     ADS_Write_Byte: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+     18          	for (count = 0; count < 8; count++)
+   \        0x2   0x2100             MOVS     R1,#+0
+   \        0x4   0xE020             B.N      ??ADS_Write_Byte_0
+     19          	{
+     20          		if (num & 0x80)
+     21          			T_DOUT_H;
+     22          		else
+     23          			T_DOUT_L;
+   \                     ??ADS_Write_Byte_1: (+1)
+   \        0x6   0xF44F 0x5280      MOV      R2,#+4096
+   \        0xA   0x.... 0x....      LDR.W    R3,??DataTable7
+   \        0xE   0x601A             STR      R2,[R3, #+0]
+   \       0x10   0xE006             B.N      ??ADS_Write_Byte_2
+   \                     ??ADS_Write_Byte_3: (+1)
+   \       0x12   0x0602             LSLS     R2,R0,#+24
+   \       0x14   0xD5F7             BPL.N    ??ADS_Write_Byte_1
+   \       0x16   0xF44F 0x5280      MOV      R2,#+4096
+   \       0x1A   0x.... 0x....      LDR.W    R3,??DataTable7_1
+   \       0x1E   0x601A             STR      R2,[R3, #+0]
+     24          		num <<= 1;
+   \                     ??ADS_Write_Byte_2: (+1)
+   \       0x20   0x0040             LSLS     R0,R0,#+1
+     25          		T_DCLK_L;
+   \       0x22   0xF44F 0x6280      MOV      R2,#+1024
+   \       0x26   0x.... 0x....      LDR.W    R3,??DataTable7
+   \       0x2A   0x601A             STR      R2,[R3, #+0]
+     26          		__nop();
+   \       0x2C   0xBF00             nop
+     27          		__nop();
+   \       0x2E   0xBF00             nop
+     28          		__nop();
+   \       0x30   0xBF00             nop
+     29          		__nop();
+   \       0x32   0xBF00             nop
+     30          		T_DCLK_H;
+   \       0x34   0xF44F 0x6280      MOV      R2,#+1024
+   \       0x38   0x.... 0x....      LDR.W    R3,??DataTable7_1
+   \       0x3C   0x601A             STR      R2,[R3, #+0]
+     31          		__nop();
+   \       0x3E   0xBF00             nop
+     32          		__nop();
+   \       0x40   0xBF00             nop
+     33          		__nop();
+   \       0x42   0xBF00             nop
+     34          		__nop();
+   \       0x44   0xBF00             nop
+     35          	}
+   \       0x46   0x1C49             ADDS     R1,R1,#+1
+   \                     ??ADS_Write_Byte_0: (+1)
+   \       0x48   0x000A             MOVS     R2,R1
+   \       0x4A   0xB2D2             UXTB     R2,R2
+   \       0x4C   0x2A08             CMP      R2,#+8
+   \       0x4E   0xDBE0             BLT.N    ??ADS_Write_Byte_3
+     36          }
+   \                     ??ADS_Write_Byte_4: (+1)
+   \       0x50   0x4770             BX       LR
+     37          
+     38          /************************************
+     39          ** ADS_Read_AD :
+     40          ** SPI Reading
+     41          ** Read adc value  
+     42          ************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     43          uint16_t ADS_Read_AD(uint8_t CMD)
+     44          {
+   \                     ADS_Read_AD: (+1)
+   \        0x0   0xB510             PUSH     {R4,LR}
+     45          	uint8_t i;
+     46          	uint8_t count = 0;
+   \        0x2   0x2100             MOVS     R1,#+0
+     47          	uint16_t Num = 0;
+   \        0x4   0x2400             MOVS     R4,#+0
+     48          	T_DCLK_L;
+   \        0x6   0xF44F 0x6180      MOV      R1,#+1024
+   \        0xA   0x.... 0x....      LDR.W    R2,??DataTable7
+   \        0xE   0x6011             STR      R1,[R2, #+0]
+     49          	T_CS_L;
+   \       0x10   0xF44F 0x7180      MOV      R1,#+256
+   \       0x14   0x.... 0x....      LDR.W    R2,??DataTable7
+   \       0x18   0x6011             STR      R1,[R2, #+0]
+     50          	ADS_Write_Byte(CMD);
+   \       0x1A   0xB2C0             UXTB     R0,R0
+   \       0x1C   0x.... 0x....      BL       ADS_Write_Byte
+     51          	for (i = 200; i > 0; i--)
+   \       0x20   0x20C8             MOVS     R0,#+200
+   \       0x22   0xE000             B.N      ??ADS_Read_AD_0
+   \                     ??ADS_Read_AD_1: (+1)
+   \       0x24   0x1E40             SUBS     R0,R0,#+1
+   \                     ??ADS_Read_AD_0: (+1)
+   \       0x26   0x0001             MOVS     R1,R0
+   \       0x28   0xB2C9             UXTB     R1,R1
+   \       0x2A   0x2900             CMP      R1,#+0
+   \       0x2C   0xD1FA             BNE.N    ??ADS_Read_AD_1
+     52          		;
+     53          	T_DCLK_H;
+   \       0x2E   0xF44F 0x6080      MOV      R0,#+1024
+   \       0x32   0x.... 0x....      LDR.W    R1,??DataTable7_1
+   \       0x36   0x6008             STR      R0,[R1, #+0]
+     54          	__nop();
+   \       0x38   0xBF00             nop
+     55          	__nop();
+   \       0x3A   0xBF00             nop
+     56          	__nop();
+   \       0x3C   0xBF00             nop
+     57          	__nop();
+   \       0x3E   0xBF00             nop
+     58          	T_DCLK_L;
+   \       0x40   0xF44F 0x6080      MOV      R0,#+1024
+   \       0x44   0x.... 0x....      LDR.W    R1,??DataTable7
+   \       0x48   0x6008             STR      R0,[R1, #+0]
+     59          	for (count = 0; count < 16; count++)
+   \       0x4A   0x2100             MOVS     R1,#+0
+   \       0x4C   0xE019             B.N      ??ADS_Read_AD_2
+     60          	{
+     61          		Num <<= 1;
+   \                     ??ADS_Read_AD_3: (+1)
+   \       0x4E   0x0064             LSLS     R4,R4,#+1
+     62          		T_DCLK_L;
+   \       0x50   0xF44F 0x6080      MOV      R0,#+1024
+   \       0x54   0x.... 0x....      LDR.W    R2,??DataTable7
+   \       0x58   0x6010             STR      R0,[R2, #+0]
+     63          		__nop();
+   \       0x5A   0xBF00             nop
+     64          		__nop();
+   \       0x5C   0xBF00             nop
+     65          		__nop();
+   \       0x5E   0xBF00             nop
+     66          		__nop();
+   \       0x60   0xBF00             nop
+     67          		T_DCLK_H;
+   \       0x62   0xF44F 0x6080      MOV      R0,#+1024
+   \       0x66   0x.... 0x....      LDR.W    R2,??DataTable7_1
+   \       0x6A   0x6010             STR      R0,[R2, #+0]
+     68          		__nop();
+   \       0x6C   0xBF00             nop
+     69          		__nop();
+   \       0x6E   0xBF00             nop
+     70          		if (T_DIN)
+   \       0x70   0x.... 0x....      LDR.W    R0,??DataTable7_2
+   \       0x74   0x6800             LDR      R0,[R0, #+0]
+   \       0x76   0xF3C0 0x20C0      UBFX     R0,R0,#+11,#+1
+   \       0x7A   0x2800             CMP      R0,#+0
+   \       0x7C   0xD000             BEQ.N    ??ADS_Read_AD_4
+     71          			Num++;
+   \       0x7E   0x1C64             ADDS     R4,R4,#+1
+     72          	}
+   \                     ??ADS_Read_AD_4: (+1)
+   \       0x80   0x1C49             ADDS     R1,R1,#+1
+   \                     ??ADS_Read_AD_2: (+1)
+   \       0x82   0x0008             MOVS     R0,R1
+   \       0x84   0xB2C0             UXTB     R0,R0
+   \       0x86   0x2810             CMP      R0,#+16
+   \       0x88   0xDBE1             BLT.N    ??ADS_Read_AD_3
+     73          	Num >>= 4;
+   \       0x8A   0xB2A4             UXTH     R4,R4
+   \       0x8C   0x0924             LSRS     R4,R4,#+4
+     74          	T_CS_H;
+   \       0x8E   0xF44F 0x7080      MOV      R0,#+256
+   \       0x92   0x.... 0x....      LDR.W    R1,??DataTable7_1
+   \       0x96   0x6008             STR      R0,[R1, #+0]
+     75          	return (Num);
+   \       0x98   0x0020             MOVS     R0,R4
+   \       0x9A   0xB280             UXTH     R0,R0
+   \       0x9C   0xBD10             POP      {R4,PC}
+     76          }
+     77          
+     78          /************************************************************************
+     79          ** #define : Read a coordinate
+     80          ** Read data for READ_TIMES times and sort them by ascending order
+     81          ** Then get rid of the highest and lowest LOST_VAL data and get the mean
+     82          ************************************************************************/
+     83          #define READ_TIMES 15 // Number of times for reading
+     84          #define LOST_VAL 5	// Number of data for discarding
+
+   \                                 In section .text, align 2, keep-with-next
+     85          uint16_t ADS_Read_XY(uint8_t xy)
+     86          {
+   \                     ADS_Read_XY: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0xB088             SUB      SP,SP,#+32
+   \        0x4   0x0004             MOVS     R4,R0
+     87          	uint16_t i, j;
+     88          	uint16_t buf[READ_TIMES];
+     89          	uint16_t sum = 0;
+   \        0x6   0x2000             MOVS     R0,#+0
+     90          	uint16_t temp;
+     91          	for (i = 0; i < READ_TIMES; i++)
+   \        0x8   0x2500             MOVS     R5,#+0
+   \        0xA   0xE009             B.N      ??ADS_Read_XY_0
+     92          	{
+     93          		buf[i] = ADS_Read_AD(xy);
+   \                     ??ADS_Read_XY_1: (+1)
+   \        0xC   0x0020             MOVS     R0,R4
+   \        0xE   0xB2C0             UXTB     R0,R0
+   \       0x10   0x.... 0x....      BL       ADS_Read_AD
+   \       0x14   0x4669             MOV      R1,SP
+   \       0x16   0x002A             MOVS     R2,R5
+   \       0x18   0xB292             UXTH     R2,R2
+   \       0x1A   0xF821 0x0012      STRH     R0,[R1, R2, LSL #+1]
+     94          	}
+   \       0x1E   0x1C6D             ADDS     R5,R5,#+1
+   \                     ??ADS_Read_XY_0: (+1)
+   \       0x20   0x0028             MOVS     R0,R5
+   \       0x22   0xB280             UXTH     R0,R0
+   \       0x24   0x280F             CMP      R0,#+15
+   \       0x26   0xDBF1             BLT.N    ??ADS_Read_XY_1
+     95          	for (i = 0; i < READ_TIMES - 1; i++)
+   \       0x28   0x2000             MOVS     R0,#+0
+   \       0x2A   0xE025             B.N      ??ADS_Read_XY_2
+     96          	{
+     97          		for (j = i + 1; j < READ_TIMES; j++)
+     98          		{
+     99          			if (buf[i] > buf[j])
+   \                     ??ADS_Read_XY_3: (+1)
+   \       0x2C   0x466A             MOV      R2,SP
+   \       0x2E   0x000B             MOVS     R3,R1
+   \       0x30   0xB29B             UXTH     R3,R3
+   \       0x32   0xF832 0x2013      LDRH     R2,[R2, R3, LSL #+1]
+   \       0x36   0x466B             MOV      R3,SP
+   \       0x38   0x0004             MOVS     R4,R0
+   \       0x3A   0xB2A4             UXTH     R4,R4
+   \       0x3C   0xF833 0x3014      LDRH     R3,[R3, R4, LSL #+1]
+   \       0x40   0x429A             CMP      R2,R3
+   \       0x42   0xD213             BCS.N    ??ADS_Read_XY_4
+    100          			{
+    101          				temp = buf[i];
+   \       0x44   0x466A             MOV      R2,SP
+   \       0x46   0x0003             MOVS     R3,R0
+   \       0x48   0xB29B             UXTH     R3,R3
+   \       0x4A   0xF832 0x2013      LDRH     R2,[R2, R3, LSL #+1]
+    102          				buf[i] = buf[j];
+   \       0x4E   0x466B             MOV      R3,SP
+   \       0x50   0x000C             MOVS     R4,R1
+   \       0x52   0xB2A4             UXTH     R4,R4
+   \       0x54   0xF833 0x3014      LDRH     R3,[R3, R4, LSL #+1]
+   \       0x58   0x466C             MOV      R4,SP
+   \       0x5A   0x0005             MOVS     R5,R0
+   \       0x5C   0xB2AD             UXTH     R5,R5
+   \       0x5E   0xF824 0x3015      STRH     R3,[R4, R5, LSL #+1]
+    103          				buf[j] = temp;
+   \       0x62   0x466B             MOV      R3,SP
+   \       0x64   0x000C             MOVS     R4,R1
+   \       0x66   0xB2A4             UXTH     R4,R4
+   \       0x68   0xF823 0x2014      STRH     R2,[R3, R4, LSL #+1]
+    104          			}
+    105          		}
+   \                     ??ADS_Read_XY_4: (+1)
+   \       0x6C   0x1C49             ADDS     R1,R1,#+1
+   \                     ??ADS_Read_XY_5: (+1)
+   \       0x6E   0x000A             MOVS     R2,R1
+   \       0x70   0xB292             UXTH     R2,R2
+   \       0x72   0x2A0F             CMP      R2,#+15
+   \       0x74   0xDBDA             BLT.N    ??ADS_Read_XY_3
+   \       0x76   0x1C40             ADDS     R0,R0,#+1
+   \                     ??ADS_Read_XY_2: (+1)
+   \       0x78   0x0001             MOVS     R1,R0
+   \       0x7A   0xB289             UXTH     R1,R1
+   \       0x7C   0x290E             CMP      R1,#+14
+   \       0x7E   0xDA01             BGE.N    ??ADS_Read_XY_6
+   \       0x80   0x1C41             ADDS     R1,R0,#+1
+   \       0x82   0xE7F4             B.N      ??ADS_Read_XY_5
+    106          	}
+    107          	sum = 0;
+   \                     ??ADS_Read_XY_6: (+1)
+   \       0x84   0x2200             MOVS     R2,#+0
+    108          	for (i = LOST_VAL; i < READ_TIMES - LOST_VAL; i++)
+   \       0x86   0x2105             MOVS     R1,#+5
+   \       0x88   0xE006             B.N      ??ADS_Read_XY_7
+    109          		sum += buf[i];
+   \                     ??ADS_Read_XY_8: (+1)
+   \       0x8A   0x4668             MOV      R0,SP
+   \       0x8C   0x000B             MOVS     R3,R1
+   \       0x8E   0xB29B             UXTH     R3,R3
+   \       0x90   0xF830 0x0013      LDRH     R0,[R0, R3, LSL #+1]
+   \       0x94   0x1882             ADDS     R2,R0,R2
+   \       0x96   0x1C49             ADDS     R1,R1,#+1
+   \                     ??ADS_Read_XY_7: (+1)
+   \       0x98   0x0008             MOVS     R0,R1
+   \       0x9A   0xB280             UXTH     R0,R0
+   \       0x9C   0x280A             CMP      R0,#+10
+   \       0x9E   0xDBF4             BLT.N    ??ADS_Read_XY_8
+    110          	temp = sum / (READ_TIMES - 2 * LOST_VAL);
+   \       0xA0   0xB292             UXTH     R2,R2
+   \       0xA2   0x2005             MOVS     R0,#+5
+   \       0xA4   0xFB92 0xF0F0      SDIV     R0,R2,R0
+    111          	return temp;
+   \       0xA8   0xB280             UXTH     R0,R0
+   \       0xAA   0xB009             ADD      SP,SP,#+36
+   \       0xAC   0xBD30             POP      {R4,R5,PC}
+    112          }
+    113          
+    114          /********************************************
+    115          ** Read_ADSX :
+    116          ** Coordinate reading with smoothing
+    117          ** The minimum value could not less than 100 
+    118          ********************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+    119          uint8_t Read_ADSX(uint16_t *x)
+    120          {
+   \                     Read_ADSX: (+1)
+   \        0x0   0xB510             PUSH     {R4,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    121          	uint16_t xtemp;
+    122          	xtemp = ADS_Read_XY(0xd0);
+   \        0x4   0x20D0             MOVS     R0,#+208
+   \        0x6   0x.... 0x....      BL       ADS_Read_XY
+    123          	if (xtemp < 100)
+   \        0xA   0x0001             MOVS     R1,R0
+   \        0xC   0xB289             UXTH     R1,R1
+   \        0xE   0x2964             CMP      R1,#+100
+   \       0x10   0xDA01             BGE.N    ??Read_ADSX_0
+    124          		return 0; // Failed to read
+   \       0x12   0x2000             MOVS     R0,#+0
+   \       0x14   0xE001             B.N      ??Read_ADSX_1
+    125          	*x = xtemp;
+   \                     ??Read_ADSX_0: (+1)
+   \       0x16   0x8020             STRH     R0,[R4, #+0]
+    126          
+    127          	return 1; // Success
+   \       0x18   0x2001             MOVS     R0,#+1
+   \                     ??Read_ADSX_1: (+1)
+   \       0x1A   0xBD10             POP      {R4,PC}
+    128          }
+    129          
+    130          /********************************************
+    131          ** Read_ADSY :
+    132          ** Coordinate reading with smoothing
+    133          ** The minimum value could not less than 100 
+    134          ********************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+    135          uint8_t Read_ADSY(uint16_t *y)
+    136          {
+   \                     Read_ADSY: (+1)
+   \        0x0   0xB510             PUSH     {R4,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    137          	uint16_t ytemp;
+    138          	ytemp = ADS_Read_XY(0x90);
+   \        0x4   0x2090             MOVS     R0,#+144
+   \        0x6   0x.... 0x....      BL       ADS_Read_XY
+    139          	if (ytemp < 100)
+   \        0xA   0x0001             MOVS     R1,R0
+   \        0xC   0xB289             UXTH     R1,R1
+   \        0xE   0x2964             CMP      R1,#+100
+   \       0x10   0xDA01             BGE.N    ??Read_ADSY_0
+    140          		return 0; // Failed to read
+   \       0x12   0x2000             MOVS     R0,#+0
+   \       0x14   0xE001             B.N      ??Read_ADSY_1
+    141          	*y = ytemp;
+   \                     ??Read_ADSY_0: (+1)
+   \       0x16   0x8020             STRH     R0,[R4, #+0]
+    142          
+    143          	return 1; // Success
+   \       0x18   0x2001             MOVS     R0,#+1
+   \                     ??Read_ADSY_1: (+1)
+   \       0x1A   0xBD10             POP      {R4,PC}
+    144          }
+    145          
+    146          /************************************************
+    147          ** Touch_GexX :
+    148          ** Read effective AD value 2 times continuously
+    149          ** and the deviation of them should not exceed 50
+    150          ** otherwise, it means a error 
+    151          ************************************************/
+    152          #define ERR_RANGE 50 // Deviation Range
+
+   \                                 In section .text, align 2, keep-with-next
+    153          uint8_t Touch_GexX(uint16_t *x, uint8_t ext)
+    154          {
+   \                     Touch_GexX: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    155          	uint16_t x1;
+    156          	uint16_t x2;
+    157          	uint8_t flag;
+    158          
+    159          	if (ext)
+   \        0x6   0x0028             MOVS     R0,R5
+   \        0x8   0xB2C0             UXTB     R0,R0
+   \        0xA   0x2800             CMP      R0,#+0
+   \        0xC   0xD006             BEQ.N    ??Touch_GexX_0
+    160          	{
+    161          
+    162          		while (T_INT)
+   \                     ??Touch_GexX_1: (+1)
+   \        0xE   0x.... 0x....      LDR.W    R0,??DataTable7_2
+   \       0x12   0x6800             LDR      R0,[R0, #+0]
+   \       0x14   0xF3C0 0x1040      UBFX     R0,R0,#+5,#+1
+   \       0x18   0x2800             CMP      R0,#+0
+   \       0x1A   0xD1F8             BNE.N    ??Touch_GexX_1
+    163          			;
+    164          	}
+    165          	flag = Read_ADSX(&x1);
+   \                     ??Touch_GexX_0: (+1)
+   \       0x1C   0xF10D 0x0002      ADD      R0,SP,#+2
+   \       0x20   0x.... 0x....      BL       Read_ADSX
+    166          	if (flag == 0)
+   \       0x24   0xB2C0             UXTB     R0,R0
+   \       0x26   0x2800             CMP      R0,#+0
+   \       0x28   0xD101             BNE.N    ??Touch_GexX_2
+    167          		return (0);
+   \       0x2A   0x2000             MOVS     R0,#+0
+   \       0x2C   0xE037             B.N      ??Touch_GexX_3
+    168          	flag = Read_ADSX(&x2);
+   \                     ??Touch_GexX_2: (+1)
+   \       0x2E   0x4668             MOV      R0,SP
+   \       0x30   0x.... 0x....      BL       Read_ADSX
+    169          	if (flag == 0)
+   \       0x34   0xB2C0             UXTB     R0,R0
+   \       0x36   0x2800             CMP      R0,#+0
+   \       0x38   0xD101             BNE.N    ??Touch_GexX_4
+    170          		return (0);
+   \       0x3A   0x2000             MOVS     R0,#+0
+   \       0x3C   0xE02F             B.N      ??Touch_GexX_3
+    171          	if (ext)
+   \                     ??Touch_GexX_4: (+1)
+   \       0x3E   0xB2ED             UXTB     R5,R5
+   \       0x40   0x2D00             CMP      R5,#+0
+   \       0x42   0xD006             BEQ.N    ??Touch_GexX_5
+    172          	{
+    173          		while (!(T_INT))
+   \                     ??Touch_GexX_6: (+1)
+   \       0x44   0x.... 0x....      LDR.W    R0,??DataTable7_2
+   \       0x48   0x6800             LDR      R0,[R0, #+0]
+   \       0x4A   0xF3C0 0x1040      UBFX     R0,R0,#+5,#+1
+   \       0x4E   0x2800             CMP      R0,#+0
+   \       0x50   0xD0F8             BEQ.N    ??Touch_GexX_6
+    174          			;
+    175          	}
+    176          	if (((x2 <= x1 && x1 < x2 + ERR_RANGE) || (x1 <= x2 && x2 < x1 + ERR_RANGE)))
+   \                     ??Touch_GexX_5: (+1)
+   \       0x52   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \       0x56   0xF8BD 0x1000      LDRH     R1,[SP, #+0]
+   \       0x5A   0x4288             CMP      R0,R1
+   \       0x5C   0xD306             BCC.N    ??Touch_GexX_7
+   \       0x5E   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \       0x62   0xF8BD 0x1000      LDRH     R1,[SP, #+0]
+   \       0x66   0x3132             ADDS     R1,R1,#+50
+   \       0x68   0x4288             CMP      R0,R1
+   \       0x6A   0xDB0C             BLT.N    ??Touch_GexX_8
+   \                     ??Touch_GexX_7: (+1)
+   \       0x6C   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x70   0xF8BD 0x1002      LDRH     R1,[SP, #+2]
+   \       0x74   0x4288             CMP      R0,R1
+   \       0x76   0xD311             BCC.N    ??Touch_GexX_9
+   \       0x78   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x7C   0xF8BD 0x1002      LDRH     R1,[SP, #+2]
+   \       0x80   0x3132             ADDS     R1,R1,#+50
+   \       0x82   0x4288             CMP      R0,R1
+   \       0x84   0xDA0A             BGE.N    ??Touch_GexX_9
+    177          	{
+    178          		*x = (x1 + x2) / 2;
+   \                     ??Touch_GexX_8: (+1)
+   \       0x86   0xF8BD 0x1002      LDRH     R1,[SP, #+2]
+   \       0x8A   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x8E   0x1841             ADDS     R1,R0,R1
+   \       0x90   0x2002             MOVS     R0,#+2
+   \       0x92   0xFB91 0xF0F0      SDIV     R0,R1,R0
+   \       0x96   0x8020             STRH     R0,[R4, #+0]
+    179          		return 1;
+   \       0x98   0x2001             MOVS     R0,#+1
+   \       0x9A   0xE000             B.N      ??Touch_GexX_3
+    180          	}
+    181          	else
+    182          		return 0;
+   \                     ??Touch_GexX_9: (+1)
+   \       0x9C   0x2000             MOVS     R0,#+0
+   \                     ??Touch_GexX_3: (+1)
+   \       0x9E   0xBD32             POP      {R1,R4,R5,PC}
+    183          }
+    184          
+    185          /************************************************
+    186          ** Touch_GexY :
+    187          ** Read effective AD value 2 times continuously
+    188          ** and the deviation of them should not exceed 50
+    189          ** otherwise, it means a error 
+    190          ************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+    191          uint8_t Touch_GexY(uint16_t *y, uint8_t ext)
+    192          {
+   \                     Touch_GexY: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    193          	uint16_t y1;
+    194          	uint16_t y2;
+    195          	uint8_t flag;
+    196          	if (ext)
+   \        0x6   0x0028             MOVS     R0,R5
+   \        0x8   0xB2C0             UXTB     R0,R0
+   \        0xA   0x2800             CMP      R0,#+0
+   \        0xC   0xD006             BEQ.N    ??Touch_GexY_0
+    197          	{
+    198          		while (T_INT)
+   \                     ??Touch_GexY_1: (+1)
+   \        0xE   0x.... 0x....      LDR.W    R0,??DataTable7_2
+   \       0x12   0x6800             LDR      R0,[R0, #+0]
+   \       0x14   0xF3C0 0x1040      UBFX     R0,R0,#+5,#+1
+   \       0x18   0x2800             CMP      R0,#+0
+   \       0x1A   0xD1F8             BNE.N    ??Touch_GexY_1
+    199          			;
+    200          	}
+    201          	flag = Read_ADSY(&y1);
+   \                     ??Touch_GexY_0: (+1)
+   \       0x1C   0xF10D 0x0002      ADD      R0,SP,#+2
+   \       0x20   0x.... 0x....      BL       Read_ADSY
+    202          	if (flag == 0)
+   \       0x24   0xB2C0             UXTB     R0,R0
+   \       0x26   0x2800             CMP      R0,#+0
+   \       0x28   0xD101             BNE.N    ??Touch_GexY_2
+    203          		return (0);
+   \       0x2A   0x2000             MOVS     R0,#+0
+   \       0x2C   0xE037             B.N      ??Touch_GexY_3
+    204          	flag = Read_ADSY(&y2);
+   \                     ??Touch_GexY_2: (+1)
+   \       0x2E   0x4668             MOV      R0,SP
+   \       0x30   0x.... 0x....      BL       Read_ADSY
+    205          	if (flag == 0)
+   \       0x34   0xB2C0             UXTB     R0,R0
+   \       0x36   0x2800             CMP      R0,#+0
+   \       0x38   0xD101             BNE.N    ??Touch_GexY_4
+    206          		return (0);
+   \       0x3A   0x2000             MOVS     R0,#+0
+   \       0x3C   0xE02F             B.N      ??Touch_GexY_3
+    207          	if (ext)
+   \                     ??Touch_GexY_4: (+1)
+   \       0x3E   0xB2ED             UXTB     R5,R5
+   \       0x40   0x2D00             CMP      R5,#+0
+   \       0x42   0xD006             BEQ.N    ??Touch_GexY_5
+    208          	{
+    209          		while (!(T_INT))
+   \                     ??Touch_GexY_6: (+1)
+   \       0x44   0x.... 0x....      LDR.W    R0,??DataTable7_2
+   \       0x48   0x6800             LDR      R0,[R0, #+0]
+   \       0x4A   0xF3C0 0x1040      UBFX     R0,R0,#+5,#+1
+   \       0x4E   0x2800             CMP      R0,#+0
+   \       0x50   0xD0F8             BEQ.N    ??Touch_GexY_6
+    210          			;
+    211          	}
+    212          	if (((y2 <= y1 && y1 < y2 + ERR_RANGE) || (y1 <= y2 && y2 < y1 + ERR_RANGE)))
+   \                     ??Touch_GexY_5: (+1)
+   \       0x52   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \       0x56   0xF8BD 0x1000      LDRH     R1,[SP, #+0]
+   \       0x5A   0x4288             CMP      R0,R1
+   \       0x5C   0xD306             BCC.N    ??Touch_GexY_7
+   \       0x5E   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \       0x62   0xF8BD 0x1000      LDRH     R1,[SP, #+0]
+   \       0x66   0x3132             ADDS     R1,R1,#+50
+   \       0x68   0x4288             CMP      R0,R1
+   \       0x6A   0xDB0C             BLT.N    ??Touch_GexY_8
+   \                     ??Touch_GexY_7: (+1)
+   \       0x6C   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x70   0xF8BD 0x1002      LDRH     R1,[SP, #+2]
+   \       0x74   0x4288             CMP      R0,R1
+   \       0x76   0xD311             BCC.N    ??Touch_GexY_9
+   \       0x78   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x7C   0xF8BD 0x1002      LDRH     R1,[SP, #+2]
+   \       0x80   0x3132             ADDS     R1,R1,#+50
+   \       0x82   0x4288             CMP      R0,R1
+   \       0x84   0xDA0A             BGE.N    ??Touch_GexY_9
+    213          	{
+    214          		*y = (y1 + y2) / 2;
+   \                     ??Touch_GexY_8: (+1)
+   \       0x86   0xF8BD 0x1002      LDRH     R1,[SP, #+2]
+   \       0x8A   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x8E   0x1841             ADDS     R1,R0,R1
+   \       0x90   0x2002             MOVS     R0,#+2
+   \       0x92   0xFB91 0xF0F0      SDIV     R0,R1,R0
+   \       0x96   0x8020             STRH     R0,[R4, #+0]
+    215          
+    216          		return 1;
+   \       0x98   0x2001             MOVS     R0,#+1
+   \       0x9A   0xE000             B.N      ??Touch_GexY_3
+    217          	}
+    218          	else
+    219          		return 0;
+   \                     ??Touch_GexY_9: (+1)
+   \       0x9C   0x2000             MOVS     R0,#+0
+   \                     ??Touch_GexY_3: (+1)
+   \       0x9E   0xBD32             POP      {R1,R4,R5,PC}
+    220          }
+    221          
+
+   \                                 In section .text, align 2, keep-with-next
+    222          void Touch_GetXY(uint16_t *x, uint16_t *y, uint8_t ext)
+    223          {
+   \                     Touch_GetXY: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0x000C             MOVS     R4,R1
+   \        0x4   0x0015             MOVS     R5,R2
+    224          	if (ext)
+   \        0x6   0x0029             MOVS     R1,R5
+   \        0x8   0xB2C9             UXTB     R1,R1
+   \        0xA   0x2900             CMP      R1,#+0
+   \        0xC   0xD006             BEQ.N    ??Touch_GetXY_0
+    225          	{
+    226          		while (T_INT)
+   \                     ??Touch_GetXY_1: (+1)
+   \        0xE   0x.... 0x....      LDR.W    R1,??DataTable7_2
+   \       0x12   0x6809             LDR      R1,[R1, #+0]
+   \       0x14   0xF3C1 0x1140      UBFX     R1,R1,#+5,#+1
+   \       0x18   0x2900             CMP      R1,#+0
+   \       0x1A   0xD1F8             BNE.N    ??Touch_GetXY_1
+    227          			;
+    228          	}
+    229          	Touch_GexX(x, 0);
+   \                     ??Touch_GetXY_0: (+1)
+   \       0x1C   0x2100             MOVS     R1,#+0
+   \       0x1E   0x.... 0x....      BL       Touch_GexX
+    230          	Touch_GexY(y, 0);
+   \       0x22   0x2100             MOVS     R1,#+0
+   \       0x24   0x0020             MOVS     R0,R4
+   \       0x26   0x.... 0x....      BL       Touch_GexY
+    231          	if (ext)
+   \       0x2A   0xB2ED             UXTB     R5,R5
+   \       0x2C   0x2D00             CMP      R5,#+0
+   \       0x2E   0xD006             BEQ.N    ??Touch_GetXY_2
+    232          	{
+    233          		while (!(T_INT))
+   \                     ??Touch_GetXY_3: (+1)
+   \       0x30   0x.... 0x....      LDR.W    R0,??DataTable7_2
+   \       0x34   0x6800             LDR      R0,[R0, #+0]
+   \       0x36   0xF3C0 0x1040      UBFX     R0,R0,#+5,#+1
+   \       0x3A   0x2800             CMP      R0,#+0
+   \       0x3C   0xD0F8             BEQ.N    ??Touch_GetXY_3
+    234          			;
+    235          	}
+    236          }
+   \                     ??Touch_GetXY_2: (+1)
+   \       0x3E   0xBD31             POP      {R0,R4,R5,PC}
+    237          
+    238          /* Touch_Configuration */
+
+   \                                 In section .text, align 2, keep-with-next
+    239          void Touch_Configuration()
+    240          {
+   \                     Touch_Configuration: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    241          	GPIO_InitTypeDef GPIO_InitStructure;
+    242          
+    243          	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOB, ENABLE);
+   \        0x2   0x2101             MOVS     R1,#+1
+   \        0x4   0x2018             MOVS     R0,#+24
+   \        0x6   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+    244          
+    245          	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8;
+   \        0xA   0xF44F 0x50A8      MOV      R0,#+5376
+   \        0xE   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+    246          	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \       0x12   0x2010             MOVS     R0,#+16
+   \       0x14   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    247          	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+   \       0x18   0x2001             MOVS     R0,#+1
+   \       0x1A   0xF88D 0x0002      STRB     R0,[SP, #+2]
+    248          	GPIO_Init(GPIOC, &GPIO_InitStructure);
+   \       0x1E   0x4669             MOV      R1,SP
+   \       0x20   0x.... 0x....      LDR.W    R0,??DataTable7_3
+   \       0x24   0x.... 0x....      BL       GPIO_Init
+    249          
+    250          	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+   \       0x28   0xF44F 0x6000      MOV      R0,#+2048
+   \       0x2C   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+    251          	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+   \       0x30   0x2048             MOVS     R0,#+72
+   \       0x32   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    252          	GPIO_Init(GPIOC, &GPIO_InitStructure);
+   \       0x36   0x4669             MOV      R1,SP
+   \       0x38   0x.... 0x....      LDR.W    R0,??DataTable7_3
+   \       0x3C   0x.... 0x....      BL       GPIO_Init
+    253          
+    254          	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+   \       0x40   0x2020             MOVS     R0,#+32
+   \       0x42   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+    255          	GPIO_Init(GPIOC, &GPIO_InitStructure);
+   \       0x46   0x4669             MOV      R1,SP
+   \       0x48   0x.... 0x....      LDR.W    R0,??DataTable7_3
+   \       0x4C   0x.... 0x....      BL       GPIO_Init
+    256          }
+   \       0x50   0xBD01             POP      {R0,PC}
+    257          
+
+   \                                 In section .text, align 2, keep-with-next
+    258          void Drow_Touch_Point(u16 x, u16 y)
+    259          {
+   \                     Drow_Touch_Point: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    260          	LCD_DrawLine(x - 12, y, x + 13, y);
+   \        0x6   0x002B             MOVS     R3,R5
+   \        0x8   0xB29B             UXTH     R3,R3
+   \        0xA   0xF114 0x020D      ADDS     R2,R4,#+13
+   \        0xE   0xB292             UXTH     R2,R2
+   \       0x10   0x0029             MOVS     R1,R5
+   \       0x12   0xB289             UXTH     R1,R1
+   \       0x14   0xF1B4 0x000C      SUBS     R0,R4,#+12
+   \       0x18   0xB280             UXTH     R0,R0
+   \       0x1A   0x.... 0x....      BL       LCD_DrawLine
+    261          	LCD_DrawLine(x, y - 12, x, y + 13);
+   \       0x1E   0xF115 0x030D      ADDS     R3,R5,#+13
+   \       0x22   0xB29B             UXTH     R3,R3
+   \       0x24   0x0022             MOVS     R2,R4
+   \       0x26   0xB292             UXTH     R2,R2
+   \       0x28   0xF1B5 0x010C      SUBS     R1,R5,#+12
+   \       0x2C   0xB289             UXTH     R1,R1
+   \       0x2E   0x0020             MOVS     R0,R4
+   \       0x30   0xB280             UXTH     R0,R0
+   \       0x32   0x.... 0x....      BL       LCD_DrawLine
+    262          	LCD_DrawPoint(x + 1, y + 1);
+   \       0x36   0x1C69             ADDS     R1,R5,#+1
+   \       0x38   0xB289             UXTH     R1,R1
+   \       0x3A   0x1C60             ADDS     R0,R4,#+1
+   \       0x3C   0xB280             UXTH     R0,R0
+   \       0x3E   0x.... 0x....      BL       LCD_DrawPoint
+    263          	LCD_DrawPoint(x - 1, y + 1);
+   \       0x42   0x1C69             ADDS     R1,R5,#+1
+   \       0x44   0xB289             UXTH     R1,R1
+   \       0x46   0x1E60             SUBS     R0,R4,#+1
+   \       0x48   0xB280             UXTH     R0,R0
+   \       0x4A   0x.... 0x....      BL       LCD_DrawPoint
+    264          	LCD_DrawPoint(x + 1, y - 1);
+   \       0x4E   0x1E69             SUBS     R1,R5,#+1
+   \       0x50   0xB289             UXTH     R1,R1
+   \       0x52   0x1C60             ADDS     R0,R4,#+1
+   \       0x54   0xB280             UXTH     R0,R0
+   \       0x56   0x.... 0x....      BL       LCD_DrawPoint
+    265          	LCD_DrawPoint(x - 1, y - 1);
+   \       0x5A   0x1E69             SUBS     R1,R5,#+1
+   \       0x5C   0xB289             UXTH     R1,R1
+   \       0x5E   0x1E60             SUBS     R0,R4,#+1
+   \       0x60   0xB280             UXTH     R0,R0
+   \       0x62   0x.... 0x....      BL       LCD_DrawPoint
+    266          	//Draw_Circle(x, y, 6);
+    267          }
+   \       0x66   0xBD31             POP      {R0,R4,R5,PC}
+    268          
+
+   \                                 In section .text, align 2, keep-with-next
+    269          void Draw_Big_Point(u16 x, u16 y)
+    270          {
+   \                     Draw_Big_Point: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    271          	LCD_DrawPoint(x, y);
+   \        0x6   0x0029             MOVS     R1,R5
+   \        0x8   0xB289             UXTH     R1,R1
+   \        0xA   0x0020             MOVS     R0,R4
+   \        0xC   0xB280             UXTH     R0,R0
+   \        0xE   0x.... 0x....      BL       LCD_DrawPoint
+    272          	LCD_DrawPoint(x + 1, y);
+   \       0x12   0x0029             MOVS     R1,R5
+   \       0x14   0xB289             UXTH     R1,R1
+   \       0x16   0x1C60             ADDS     R0,R4,#+1
+   \       0x18   0xB280             UXTH     R0,R0
+   \       0x1A   0x.... 0x....      BL       LCD_DrawPoint
+    273          	LCD_DrawPoint(x, y + 1);
+   \       0x1E   0x1C69             ADDS     R1,R5,#+1
+   \       0x20   0xB289             UXTH     R1,R1
+   \       0x22   0x0020             MOVS     R0,R4
+   \       0x24   0xB280             UXTH     R0,R0
+   \       0x26   0x.... 0x....      BL       LCD_DrawPoint
+    274          	LCD_DrawPoint(x + 1, y + 1);
+   \       0x2A   0x1C6D             ADDS     R5,R5,#+1
+   \       0x2C   0x0029             MOVS     R1,R5
+   \       0x2E   0xB289             UXTH     R1,R1
+   \       0x30   0x1C64             ADDS     R4,R4,#+1
+   \       0x32   0x0020             MOVS     R0,R4
+   \       0x34   0xB280             UXTH     R0,R0
+   \       0x36   0x.... 0x....      BL       LCD_DrawPoint
+    275          }
+   \       0x3A   0xBD31             POP      {R0,R4,R5,PC}
+    276          
+    277          /* Refresh Screen(default : WHITE) */
+
+   \                                 In section .text, align 2, keep-with-next
+    278          void Refreshes_Screen(void)
+    279          {
+   \                     Refreshes_Screen: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    280          	LCD_Clear(WHITE);
+   \        0x2   0xF64F 0x70FF      MOVW     R0,#+65535
+   \        0x6   0x.... 0x....      BL       LCD_Clear
+    281          }
+   \        0xA   0xBD01             POP      {R0,PC}
+    282          
+
+   \                                 In section .text, align 2, keep-with-next
+    283          void Convert_Pos(u16 x_in, u16 y_in, u16 *x_out, u16 *y_out)
+    284          {
+   \                     Convert_Pos: (+1)
+   \        0x0   0xB5F8             PUSH     {R3-R7,LR}
+   \        0x2   0x000D             MOVS     R5,R1
+   \        0x4   0x0016             MOVS     R6,R2
+   \        0x6   0x001C             MOVS     R4,R3
+    285          	*x_out = xfac * x_in + xoff;
+                 	       ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \        0x8   0xB280             UXTH     R0,R0
+   \        0xA   0x.... 0x....      BL       __aeabi_ui2f
+   \        0xE   0x....             LDR.N    R1,??DataTable7_4
+   \       0x10   0x6809             LDR      R1,[R1, #+0]
+   \       0x12   0x.... 0x....      BL       __aeabi_fmul
+   \       0x16   0x0007             MOVS     R7,R0
+   \       0x18   0x....             LDR.N    R0,??DataTable7_5
+   \       0x1A   0xF9B0 0x0000      LDRSH    R0,[R0, #+0]
+   \       0x1E   0x.... 0x....      BL       __aeabi_i2f
+   \       0x22   0x0039             MOVS     R1,R7
+   \       0x24   0x.... 0x....      BL       __aeabi_fadd
+   \       0x28   0x.... 0x....      BL       __aeabi_f2iz
+   \       0x2C   0x8030             STRH     R0,[R6, #+0]
+    286          	*y_out = yfac * y_in + yoff;
+                 	       ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \       0x2E   0xB2AD             UXTH     R5,R5
+   \       0x30   0x0028             MOVS     R0,R5
+   \       0x32   0x.... 0x....      BL       __aeabi_ui2f
+   \       0x36   0x....             LDR.N    R1,??DataTable7_6
+   \       0x38   0x6809             LDR      R1,[R1, #+0]
+   \       0x3A   0x.... 0x....      BL       __aeabi_fmul
+   \       0x3E   0x0005             MOVS     R5,R0
+   \       0x40   0x....             LDR.N    R0,??DataTable7_7
+   \       0x42   0xF9B0 0x0000      LDRSH    R0,[R0, #+0]
+   \       0x46   0x.... 0x....      BL       __aeabi_i2f
+   \       0x4A   0x0029             MOVS     R1,R5
+   \       0x4C   0x.... 0x....      BL       __aeabi_fadd
+   \       0x50   0x.... 0x....      BL       __aeabi_f2iz
+   \       0x54   0x8020             STRH     R0,[R4, #+0]
+    287          }
+   \       0x56   0xBDF1             POP      {R0,R4-R7,PC}
+    288          
+
+   \                                 In section .bss, align 4
+    289          float xfac;
+   \                     xfac:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 4
+    290          float yfac;
+   \                     yfac:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 2
+    291          short xoff;
+   \                     xoff:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+    292          short yoff;
+   \                     yoff:
+   \        0x0                      DS8 2
+    293          
+    294          /************************************************
+    295          ** Touch_Adjust :
+    296          ** Code for touch screen calibration
+    297          ** Get 4 calibration parameters
+    298          ************************************************/
+
+   \                                 In section .text, align 2, keep-with-next
+    299          void Touch_Adjust(void)
+    300          {
+   \                     Touch_Adjust: (+1)
+   \        0x0   0xB57F             PUSH     {R0-R6,LR}
+   \        0x2   0xE7FF             B.N      ??Touch_Adjust_0
+    301          	u8 i;
+    302          
+    303          	u16 pos_temp[4][2];
+    304          	u16 d1, d2;
+    305          	u32 tem1, tem2;
+    306          	float fac;
+    307          
+    308          	while (1)
+    309          	{
+    310          
+    311          		for (i = 0; i < 4; i++)
+    312          		{
+    313          
+    314          			Refreshes_Screen();
+    315          			if (i == 0)
+    316          			{
+    317          				Drow_Touch_Point(20, 20);
+    318          				Touch_GetXY(&pos_temp[0][0], &pos_temp[0][1], 1);
+    319          			}
+    320          			else if (i == 1)
+    321          			{
+    322          				Drow_Touch_Point(220, 20);
+    323          				Touch_GetXY(&pos_temp[1][0], &pos_temp[1][1], 1);
+    324          			}
+    325          			else if (i == 2)
+    326          			{
+    327          				Drow_Touch_Point(20, 300);
+    328          				Touch_GetXY(&pos_temp[2][0], &pos_temp[2][1], 1);
+    329          			}
+    330          			else
+    331          			{
+    332          
+    333          				Drow_Touch_Point(220, 300);
+    334          				Touch_GetXY(&pos_temp[3][0], &pos_temp[3][1], 1);
+    335          			}
+    336          		}
+    337          
+    338          		tem1 = abs(pos_temp[0][0] - pos_temp[1][0]); //x1-x2
+    339          		tem2 = abs(pos_temp[0][1] - pos_temp[1][1]); //y1-y2
+    340          		tem1 *= tem1;
+    341          		tem2 *= tem2;
+    342          		d1 = sqrt(tem1 + tem2);
+                 		   ^
+Warning[Pa093]: implicit conversion from floating point to integer
+    343          
+    344          		tem1 = abs(pos_temp[2][0] - pos_temp[3][0]); //x3-x4
+    345          		tem2 = abs(pos_temp[2][1] - pos_temp[3][1]); //y3-y4
+    346          		tem1 *= tem1;
+    347          		tem2 *= tem2;
+    348          		d2 = sqrt(tem1 + tem2);
+                 		   ^
+Warning[Pa093]: implicit conversion from floating point to integer
+    349          		fac = (float)d1 / d2;
+    350          		if (fac < 0.95 || fac > 1.05 || d1 == 0 || d2 == 0)
+    351          		{
+    352          			continue;
+   \                     ??Touch_Adjust_1: (+1)
+   \                     ??Touch_Adjust_0: (+1)
+   \        0x4   0x2400             MOVS     R4,#+0
+   \        0x6   0xE01B             B.N      ??Touch_Adjust_2
+   \                     ??Touch_Adjust_3: (+1)
+   \        0x8   0xF44F 0x7196      MOV      R1,#+300
+   \        0xC   0x20DC             MOVS     R0,#+220
+   \        0xE   0x.... 0x....      BL       Drow_Touch_Point
+   \       0x12   0x2201             MOVS     R2,#+1
+   \       0x14   0xF10D 0x010E      ADD      R1,SP,#+14
+   \       0x18   0xA803             ADD      R0,SP,#+12
+   \       0x1A   0x.... 0x....      BL       Touch_GetXY
+   \       0x1E   0xE00E             B.N      ??Touch_Adjust_4
+   \                     ??Touch_Adjust_5: (+1)
+   \       0x20   0x0020             MOVS     R0,R4
+   \       0x22   0xB2C0             UXTB     R0,R0
+   \       0x24   0x2802             CMP      R0,#+2
+   \       0x26   0xD1EF             BNE.N    ??Touch_Adjust_3
+   \       0x28   0xF44F 0x7196      MOV      R1,#+300
+   \       0x2C   0x2014             MOVS     R0,#+20
+   \       0x2E   0x.... 0x....      BL       Drow_Touch_Point
+   \       0x32   0x2201             MOVS     R2,#+1
+   \       0x34   0xF10D 0x010A      ADD      R1,SP,#+10
+   \       0x38   0xA802             ADD      R0,SP,#+8
+   \       0x3A   0x.... 0x....      BL       Touch_GetXY
+   \                     ??Touch_Adjust_4: (+1)
+   \       0x3E   0x1C64             ADDS     R4,R4,#+1
+   \                     ??Touch_Adjust_2: (+1)
+   \       0x40   0x0020             MOVS     R0,R4
+   \       0x42   0xB2C0             UXTB     R0,R0
+   \       0x44   0x2804             CMP      R0,#+4
+   \       0x46   0xDA1F             BGE.N    ??Touch_Adjust_6
+   \       0x48   0x.... 0x....      BL       Refreshes_Screen
+   \       0x4C   0x0020             MOVS     R0,R4
+   \       0x4E   0xB2C0             UXTB     R0,R0
+   \       0x50   0x2800             CMP      R0,#+0
+   \       0x52   0xD10A             BNE.N    ??Touch_Adjust_7
+   \       0x54   0x2114             MOVS     R1,#+20
+   \       0x56   0x2014             MOVS     R0,#+20
+   \       0x58   0x.... 0x....      BL       Drow_Touch_Point
+   \       0x5C   0x2201             MOVS     R2,#+1
+   \       0x5E   0xF10D 0x0102      ADD      R1,SP,#+2
+   \       0x62   0x4668             MOV      R0,SP
+   \       0x64   0x.... 0x....      BL       Touch_GetXY
+   \       0x68   0xE7E9             B.N      ??Touch_Adjust_4
+   \                     ??Touch_Adjust_7: (+1)
+   \       0x6A   0x0020             MOVS     R0,R4
+   \       0x6C   0xB2C0             UXTB     R0,R0
+   \       0x6E   0x2801             CMP      R0,#+1
+   \       0x70   0xD1D6             BNE.N    ??Touch_Adjust_5
+   \       0x72   0x2114             MOVS     R1,#+20
+   \       0x74   0x20DC             MOVS     R0,#+220
+   \       0x76   0x.... 0x....      BL       Drow_Touch_Point
+   \       0x7A   0x2201             MOVS     R2,#+1
+   \       0x7C   0xF10D 0x0106      ADD      R1,SP,#+6
+   \       0x80   0xA801             ADD      R0,SP,#+4
+   \       0x82   0x.... 0x....      BL       Touch_GetXY
+   \       0x86   0xE7DA             B.N      ??Touch_Adjust_4
+   \                     ??Touch_Adjust_6: (+1)
+   \       0x88   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x8C   0xF8BD 0x1004      LDRH     R1,[SP, #+4]
+   \       0x90   0x1A40             SUBS     R0,R0,R1
+   \       0x92   0x.... 0x....      BL       abs
+   \       0x96   0x0004             MOVS     R4,R0
+   \       0x98   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \       0x9C   0xF8BD 0x1006      LDRH     R1,[SP, #+6]
+   \       0xA0   0x1A40             SUBS     R0,R0,R1
+   \       0xA2   0x.... 0x....      BL       abs
+   \       0xA6   0x4364             MULS     R4,R4,R4
+   \       0xA8   0x4340             MULS     R0,R0,R0
+   \       0xAA   0x1904             ADDS     R4,R0,R4
+   \       0xAC   0x0020             MOVS     R0,R4
+   \       0xAE   0x.... 0x....      BL       __aeabi_ui2d
+   \       0xB2   0x.... 0x....      BL       sqrt
+   \       0xB6   0x.... 0x....      BL       __aeabi_d2iz
+   \       0xBA   0x0004             MOVS     R4,R0
+   \       0xBC   0xF8BD 0x0008      LDRH     R0,[SP, #+8]
+   \       0xC0   0xF8BD 0x100C      LDRH     R1,[SP, #+12]
+   \       0xC4   0x1A40             SUBS     R0,R0,R1
+   \       0xC6   0x.... 0x....      BL       abs
+   \       0xCA   0x0005             MOVS     R5,R0
+   \       0xCC   0xF8BD 0x000A      LDRH     R0,[SP, #+10]
+   \       0xD0   0xF8BD 0x100E      LDRH     R1,[SP, #+14]
+   \       0xD4   0x1A40             SUBS     R0,R0,R1
+   \       0xD6   0x.... 0x....      BL       abs
+   \       0xDA   0x436D             MULS     R5,R5,R5
+   \       0xDC   0x4340             MULS     R0,R0,R0
+   \       0xDE   0x1945             ADDS     R5,R0,R5
+   \       0xE0   0x0028             MOVS     R0,R5
+   \       0xE2   0x.... 0x....      BL       __aeabi_ui2d
+   \       0xE6   0x.... 0x....      BL       sqrt
+   \       0xEA   0x.... 0x....      BL       __aeabi_d2iz
+   \       0xEE   0x0005             MOVS     R5,R0
+   \       0xF0   0x0020             MOVS     R0,R4
+   \       0xF2   0xB280             UXTH     R0,R0
+   \       0xF4   0x.... 0x....      BL       __aeabi_ui2f
+   \       0xF8   0x0006             MOVS     R6,R0
+   \       0xFA   0x0028             MOVS     R0,R5
+   \       0xFC   0xB280             UXTH     R0,R0
+   \       0xFE   0x.... 0x....      BL       __aeabi_ui2f
+   \      0x102   0x0001             MOVS     R1,R0
+   \      0x104   0x0030             MOVS     R0,R6
+   \      0x106   0x.... 0x....      BL       __aeabi_fdiv
+   \      0x10A   0x....             LDR.N    R1,??DataTable7_8
+   \      0x10C   0x.... 0x....      BL       __aeabi_cfcmple
+   \      0x110   0xF4FF 0xAF78      BCC.W    ??Touch_Adjust_1
+   \      0x114   0x....             LDR.N    R1,??DataTable7_9
+   \      0x116   0x.... 0x....      BL       __aeabi_cfrcmple
+   \      0x11A   0xF67F 0xAF73      BLS.W    ??Touch_Adjust_1
+   \      0x11E   0xB2A4             UXTH     R4,R4
+   \      0x120   0x2C00             CMP      R4,#+0
+   \      0x122   0xF43F 0xAF6F      BEQ.W    ??Touch_Adjust_1
+   \      0x126   0xB2AD             UXTH     R5,R5
+   \      0x128   0x2D00             CMP      R5,#+0
+   \      0x12A   0xF43F 0xAF6B      BEQ.W    ??Touch_Adjust_1
+    353          		}
+    354          		tem1 = abs(pos_temp[0][0] - pos_temp[2][0]); //x1-x3
+   \      0x12E   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \      0x132   0xF8BD 0x1008      LDRH     R1,[SP, #+8]
+   \      0x136   0x1A40             SUBS     R0,R0,R1
+   \      0x138   0x.... 0x....      BL       abs
+   \      0x13C   0x0004             MOVS     R4,R0
+    355          		tem2 = abs(pos_temp[0][1] - pos_temp[2][1]); //y1-y3
+   \      0x13E   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \      0x142   0xF8BD 0x100A      LDRH     R1,[SP, #+10]
+   \      0x146   0x1A40             SUBS     R0,R0,R1
+   \      0x148   0x.... 0x....      BL       abs
+    356          		tem1 *= tem1;
+   \      0x14C   0x4364             MULS     R4,R4,R4
+    357          		tem2 *= tem2;
+   \      0x14E   0x4340             MULS     R0,R0,R0
+    358          		d1 = sqrt(tem1 + tem2);
+                 		   ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \      0x150   0x1904             ADDS     R4,R0,R4
+   \      0x152   0x0020             MOVS     R0,R4
+   \      0x154   0x.... 0x....      BL       __aeabi_ui2d
+   \      0x158   0x.... 0x....      BL       sqrt
+   \      0x15C   0x.... 0x....      BL       __aeabi_d2iz
+   \      0x160   0x0004             MOVS     R4,R0
+    359          
+    360          		tem1 = abs(pos_temp[1][0] - pos_temp[3][0]); //x2-x4
+   \      0x162   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \      0x166   0xF8BD 0x100C      LDRH     R1,[SP, #+12]
+   \      0x16A   0x1A40             SUBS     R0,R0,R1
+   \      0x16C   0x.... 0x....      BL       abs
+   \      0x170   0x0005             MOVS     R5,R0
+    361          		tem2 = abs(pos_temp[1][1] - pos_temp[3][1]); //y2-y4
+   \      0x172   0xF8BD 0x0006      LDRH     R0,[SP, #+6]
+   \      0x176   0xF8BD 0x100E      LDRH     R1,[SP, #+14]
+   \      0x17A   0x1A40             SUBS     R0,R0,R1
+   \      0x17C   0x.... 0x....      BL       abs
+    362          		tem1 *= tem1;
+   \      0x180   0x436D             MULS     R5,R5,R5
+    363          		tem2 *= tem2;
+   \      0x182   0x4340             MULS     R0,R0,R0
+    364          		d2 = sqrt(tem1 + tem2);
+                 		   ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \      0x184   0x1945             ADDS     R5,R0,R5
+   \      0x186   0x0028             MOVS     R0,R5
+   \      0x188   0x.... 0x....      BL       __aeabi_ui2d
+   \      0x18C   0x.... 0x....      BL       sqrt
+   \      0x190   0x.... 0x....      BL       __aeabi_d2iz
+   \      0x194   0x0005             MOVS     R5,R0
+    365          		fac = (float)d1 / d2;
+   \      0x196   0xB2A4             UXTH     R4,R4
+   \      0x198   0x0020             MOVS     R0,R4
+   \      0x19A   0x.... 0x....      BL       __aeabi_ui2f
+   \      0x19E   0x0004             MOVS     R4,R0
+   \      0x1A0   0xB2AD             UXTH     R5,R5
+   \      0x1A2   0x0028             MOVS     R0,R5
+   \      0x1A4   0x.... 0x....      BL       __aeabi_ui2f
+   \      0x1A8   0x0001             MOVS     R1,R0
+   \      0x1AA   0x0020             MOVS     R0,R4
+   \      0x1AC   0x.... 0x....      BL       __aeabi_fdiv
+    366          		if (fac < 0.95 || fac > 1.05)
+   \      0x1B0   0x....             LDR.N    R1,??DataTable7_8
+   \      0x1B2   0x.... 0x....      BL       __aeabi_cfcmple
+   \      0x1B6   0xD303             BCC.N    ??Touch_Adjust_8
+   \      0x1B8   0x....             LDR.N    R1,??DataTable7_9
+   \      0x1BA   0x.... 0x....      BL       __aeabi_cfrcmple
+   \      0x1BE   0xD800             BHI.N    ??Touch_Adjust_9
+    367          		{
+    368          			continue;
+   \                     ??Touch_Adjust_8: (+1)
+   \      0x1C0   0xE720             B.N      ??Touch_Adjust_0
+    369          		}
+    370          
+    371          		tem1 = abs(pos_temp[1][0] - pos_temp[2][0]); //x1-x3
+   \                     ??Touch_Adjust_9: (+1)
+   \      0x1C2   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \      0x1C6   0xF8BD 0x1008      LDRH     R1,[SP, #+8]
+   \      0x1CA   0x1A40             SUBS     R0,R0,R1
+   \      0x1CC   0x.... 0x....      BL       abs
+   \      0x1D0   0x0004             MOVS     R4,R0
+    372          		tem2 = abs(pos_temp[1][1] - pos_temp[2][1]); //y1-y3
+   \      0x1D2   0xF8BD 0x0006      LDRH     R0,[SP, #+6]
+   \      0x1D6   0xF8BD 0x100A      LDRH     R1,[SP, #+10]
+   \      0x1DA   0x1A40             SUBS     R0,R0,R1
+   \      0x1DC   0x.... 0x....      BL       abs
+    373          		tem1 *= tem1;
+   \      0x1E0   0x4364             MULS     R4,R4,R4
+    374          		tem2 *= tem2;
+   \      0x1E2   0x4340             MULS     R0,R0,R0
+    375          		d1 = sqrt(tem1 + tem2);
+                 		   ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \      0x1E4   0x1904             ADDS     R4,R0,R4
+   \      0x1E6   0x0020             MOVS     R0,R4
+   \      0x1E8   0x.... 0x....      BL       __aeabi_ui2d
+   \      0x1EC   0x.... 0x....      BL       sqrt
+   \      0x1F0   0x.... 0x....      BL       __aeabi_d2iz
+   \      0x1F4   0x0004             MOVS     R4,R0
+    376          
+    377          		tem1 = abs(pos_temp[0][0] - pos_temp[3][0]); //x2-x4
+   \      0x1F6   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \      0x1FA   0xF8BD 0x100C      LDRH     R1,[SP, #+12]
+   \      0x1FE   0x1A40             SUBS     R0,R0,R1
+   \      0x200   0x.... 0x....      BL       abs
+   \      0x204   0x0005             MOVS     R5,R0
+    378          		tem2 = abs(pos_temp[0][1] - pos_temp[3][1]); //y2-y4
+   \      0x206   0xF8BD 0x0002      LDRH     R0,[SP, #+2]
+   \      0x20A   0xF8BD 0x100E      LDRH     R1,[SP, #+14]
+   \      0x20E   0x1A40             SUBS     R0,R0,R1
+   \      0x210   0x.... 0x....      BL       abs
+    379          		tem1 *= tem1;
+   \      0x214   0x436D             MULS     R5,R5,R5
+    380          		tem2 *= tem2;
+   \      0x216   0x4340             MULS     R0,R0,R0
+    381          		d2 = sqrt(tem1 + tem2);
+                 		   ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \      0x218   0x1945             ADDS     R5,R0,R5
+   \      0x21A   0x0028             MOVS     R0,R5
+   \      0x21C   0x.... 0x....      BL       __aeabi_ui2d
+   \      0x220   0x.... 0x....      BL       sqrt
+   \      0x224   0x.... 0x....      BL       __aeabi_d2iz
+   \      0x228   0x0005             MOVS     R5,R0
+    382          		fac = (float)d1 / d2;
+   \      0x22A   0xB2A4             UXTH     R4,R4
+   \      0x22C   0x0020             MOVS     R0,R4
+   \      0x22E   0x.... 0x....      BL       __aeabi_ui2f
+   \      0x232   0x0004             MOVS     R4,R0
+   \      0x234   0xB2AD             UXTH     R5,R5
+   \      0x236   0x0028             MOVS     R0,R5
+   \      0x238   0x.... 0x....      BL       __aeabi_ui2f
+   \      0x23C   0x0001             MOVS     R1,R0
+   \      0x23E   0x0020             MOVS     R0,R4
+   \      0x240   0x.... 0x....      BL       __aeabi_fdiv
+    383          		if (fac < 0.95 || fac > 1.05)
+   \      0x244   0x....             LDR.N    R1,??DataTable7_8
+   \      0x246   0x.... 0x....      BL       __aeabi_cfcmple
+   \      0x24A   0xD303             BCC.N    ??Touch_Adjust_10
+   \      0x24C   0x....             LDR.N    R1,??DataTable7_9
+   \      0x24E   0x.... 0x....      BL       __aeabi_cfrcmple
+   \      0x252   0xD800             BHI.N    ??Touch_Adjust_11
+    384          		{
+    385          			continue;
+   \                     ??Touch_Adjust_10: (+1)
+   \      0x254   0xE6D6             B.N      ??Touch_Adjust_0
+    386          		}
+    387          
+    388          		xfac = (float)220 / (pos_temp[1][0] - pos_temp[0][0]);
+   \                     ??Touch_Adjust_11: (+1)
+   \      0x256   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \      0x25A   0xF8BD 0x1000      LDRH     R1,[SP, #+0]
+   \      0x25E   0x1A40             SUBS     R0,R0,R1
+   \      0x260   0x.... 0x....      BL       __aeabi_i2f
+   \      0x264   0x0001             MOVS     R1,R0
+   \      0x266   0x....             LDR.N    R0,??DataTable7_10
+   \      0x268   0x.... 0x....      BL       __aeabi_fdiv
+   \      0x26C   0x....             LDR.N    R1,??DataTable7_4
+   \      0x26E   0x6008             STR      R0,[R1, #+0]
+    389          		xoff = (240 - xfac * (pos_temp[1][0] + pos_temp[0][0])) / 2;
+                 		     ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \      0x270   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \      0x274   0xF8BD 0x1000      LDRH     R1,[SP, #+0]
+   \      0x278   0x1808             ADDS     R0,R1,R0
+   \      0x27A   0x.... 0x....      BL       __aeabi_i2f
+   \      0x27E   0x....             LDR.N    R1,??DataTable7_4
+   \      0x280   0x6809             LDR      R1,[R1, #+0]
+   \      0x282   0x.... 0x....      BL       __aeabi_fmul
+   \      0x286   0x0001             MOVS     R1,R0
+   \      0x288   0x....             LDR.N    R0,??DataTable7_11
+   \      0x28A   0x.... 0x....      BL       __aeabi_fsub
+   \      0x28E   0xF05F 0x4180      MOVS     R1,#+1073741824
+   \      0x292   0x.... 0x....      BL       __aeabi_fdiv
+   \      0x296   0x.... 0x....      BL       __aeabi_f2iz
+   \      0x29A   0x....             LDR.N    R1,??DataTable7_5
+   \      0x29C   0x8008             STRH     R0,[R1, #+0]
+    390          
+    391          		yfac = (float)300 / (pos_temp[2][1] - pos_temp[1][1]);
+   \      0x29E   0xF8BD 0x000A      LDRH     R0,[SP, #+10]
+   \      0x2A2   0xF8BD 0x1006      LDRH     R1,[SP, #+6]
+   \      0x2A6   0x1A40             SUBS     R0,R0,R1
+   \      0x2A8   0x.... 0x....      BL       __aeabi_i2f
+   \      0x2AC   0x0001             MOVS     R1,R0
+   \      0x2AE   0x....             LDR.N    R0,??DataTable7_12
+   \      0x2B0   0x.... 0x....      BL       __aeabi_fdiv
+   \      0x2B4   0x....             LDR.N    R1,??DataTable7_6
+   \      0x2B6   0x6008             STR      R0,[R1, #+0]
+    392          		yoff = (320 - yfac * (pos_temp[2][1] + pos_temp[1][1])) / 2;
+                 		     ^
+Warning[Pa093]: implicit conversion from floating point to integer
+   \      0x2B8   0xF8BD 0x000A      LDRH     R0,[SP, #+10]
+   \      0x2BC   0xF8BD 0x1006      LDRH     R1,[SP, #+6]
+   \      0x2C0   0x1808             ADDS     R0,R1,R0
+   \      0x2C2   0x.... 0x....      BL       __aeabi_i2f
+   \      0x2C6   0x....             LDR.N    R1,??DataTable7_6
+   \      0x2C8   0x6809             LDR      R1,[R1, #+0]
+   \      0x2CA   0x.... 0x....      BL       __aeabi_fmul
+   \      0x2CE   0x0001             MOVS     R1,R0
+   \      0x2D0   0x....             LDR.N    R0,??DataTable7_13
+   \      0x2D2   0x.... 0x....      BL       __aeabi_fsub
+   \      0x2D6   0xF05F 0x4180      MOVS     R1,#+1073741824
+   \      0x2DA   0x.... 0x....      BL       __aeabi_fdiv
+   \      0x2DE   0x.... 0x....      BL       __aeabi_f2iz
+   \      0x2E2   0x....             LDR.N    R1,??DataTable7_7
+   \      0x2E4   0x8008             STRH     R0,[R1, #+0]
+    393          
+    394          		LCD_Clear(BLACK);
+   \      0x2E6   0x2000             MOVS     R0,#+0
+   \      0x2E8   0x.... 0x....      BL       LCD_Clear
+    395          		break;
+    396          	}
+    397          }
+   \      0x2EC   0xBD7F             POP      {R0-R6,PC}
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7:
+   \        0x0   0x4001'1014        DC32     0x40011014
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_1:
+   \        0x0   0x4001'1010        DC32     0x40011010
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_2:
+   \        0x0   0x4001'1008        DC32     0x40011008
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_3:
+   \        0x0   0x4001'1000        DC32     0x40011000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_4:
+   \        0x0   0x....'....        DC32     xfac
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_5:
+   \        0x0   0x....'....        DC32     xoff
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_6:
+   \        0x0   0x....'....        DC32     yfac
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_7:
+   \        0x0   0x....'....        DC32     yoff
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_8:
+   \        0x0   0x3F73'3334        DC32     0x3f733334
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_9:
+   \        0x0   0x3F86'6667        DC32     0x3f866667
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_10:
+   \        0x0   0x435C'0000        DC32     0x435c0000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_11:
+   \        0x0   0x4370'0000        DC32     0x43700000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_12:
+   \        0x0   0x4396'0000        DC32     0x43960000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7_13:
+   \        0x0   0x43A0'0000        DC32     0x43a00000
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   ADS_Read_AD
+         8   -> ADS_Write_Byte
+      48   ADS_Read_XY
+        48   -> ADS_Read_AD
+       0   ADS_Write_Byte
+      24   Convert_Pos
+        24   -> __aeabi_f2iz
+        24   -> __aeabi_fadd
+        24   -> __aeabi_fmul
+        24   -> __aeabi_i2f
+        24   -> __aeabi_ui2f
+      16   Draw_Big_Point
+        16   -> LCD_DrawPoint
+      16   Drow_Touch_Point
+        16   -> LCD_DrawLine
+        16   -> LCD_DrawPoint
+       8   Read_ADSX
+         8   -> ADS_Read_XY
+       8   Read_ADSY
+         8   -> ADS_Read_XY
+       8   Refreshes_Screen
+         8   -> LCD_Clear
+      32   Touch_Adjust
+        32   -> Drow_Touch_Point
+        32   -> LCD_Clear
+        32   -> Refreshes_Screen
+        32   -> Touch_GetXY
+        32   -> __aeabi_d2iz
+        32   -> __aeabi_f2iz
+        32   -> __aeabi_fdiv
+        32   -> __aeabi_fmul
+        32   -> __aeabi_fsub
+        32   -> __aeabi_i2f
+        32   -> __aeabi_ui2d
+        32   -> __aeabi_ui2f
+        32   -> abs
+        32   -> sqrt
+        32 __aeabi_cfcmple
+        32 __aeabi_cfrcmple
+       8   Touch_Configuration
+         8   -> GPIO_Init
+         8   -> RCC_APB2PeriphClockCmd
+      16   Touch_GetXY
+        16   -> Touch_GexX
+        16   -> Touch_GexY
+      16   Touch_GexX
+        16   -> Read_ADSX
+      16   Touch_GexY
+        16   -> Read_ADSY
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable7
+       4  ??DataTable7_1
+       4  ??DataTable7_10
+       4  ??DataTable7_11
+       4  ??DataTable7_12
+       4  ??DataTable7_13
+       4  ??DataTable7_2
+       4  ??DataTable7_3
+       4  ??DataTable7_4
+       4  ??DataTable7_5
+       4  ??DataTable7_6
+       4  ??DataTable7_7
+       4  ??DataTable7_8
+       4  ??DataTable7_9
+     158  ADS_Read_AD
+     174  ADS_Read_XY
+      82  ADS_Write_Byte
+      88  Convert_Pos
+      60  Draw_Big_Point
+     104  Drow_Touch_Point
+      28  Read_ADSX
+      28  Read_ADSY
+      12  Refreshes_Screen
+     750  Touch_Adjust
+      82  Touch_Configuration
+      64  Touch_GetXY
+     160  Touch_GexX
+     160  Touch_GexY
+       4  xfac
+       2  xoff
+       4  yfac
+       2  yoff
+
+ 
+    12 bytes in section .bss
+ 2'006 bytes in section .text
+ 
+ 2'006 bytes of CODE memory
+    12 bytes of DATA memory
+
+Errors: none
+Warnings: 10

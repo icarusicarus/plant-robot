@@ -1,0 +1,449 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V9.10.2.313/W64 for ARM         03/Nov/2021  18:48:25
+# Copyright 1999-2021 IAR Systems AB.
+#
+#    Cpu mode          =  thumb
+#    Endian            =  little
+#    Source file       =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\misc.c
+#    Command line      =
+#        -f C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\misc.o.rsp
+#        (C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\misc.c
+#        -D USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\Libraries -o
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --no_clustering
+#        --no_scheduling --debug --endian=little --cpu=Cortex-M3 -e --fpu=None
+#        --dlib_config "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\inc\c\DLib_Config_Normal.h" -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\inc\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\ -Ol -I
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\CMSIS\Core\Include\\" -I "C:\Program Files\IAR
+#        Systems\Embedded Workbench 9.0\arm\CMSIS\DSP\Include\\")
+#        --dependencies=n
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\misc.o.d
+#    Locale            =  C
+#    List file         =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\Libraries\misc.lst
+#    Object file       =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\misc.o
+#    Runtime model:       
+#      __SystemLibrary =  DLib
+#      __dlib_version  =  6
+#      __size_limit    =  32768|ARM.EW.LINKER
+#
+###############################################################################
+
+C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\misc.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    misc.c
+      4            * @author  MCD Application Team
+      5            * @version V3.5.0
+      6            * @date    11-March-2011
+      7            * @brief   This file provides all the miscellaneous firmware functions (add-on
+      8            *          to CMSIS functions).
+      9            ******************************************************************************
+     10            * @attention
+     11            *
+     12            * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+     13            * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+     14            * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
+     15            * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+     16            * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+     17            * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     18            *
+     19            * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+     20            ******************************************************************************
+     21            */
+     22          
+     23          /* Includes ------------------------------------------------------------------*/
+     24          #include "misc.h"
+     25          
+     26          /** @addtogroup STM32F10x_StdPeriph_Driver
+     27            * @{
+     28            */
+     29          
+     30          /** @defgroup MISC 
+     31            * @brief MISC driver modules
+     32            * @{
+     33            */
+     34          
+     35          /** @defgroup MISC_Private_TypesDefinitions
+     36            * @{
+     37            */
+     38          
+     39          /**
+     40            * @}
+     41            */ 
+     42          
+     43          /** @defgroup MISC_Private_Defines
+     44            * @{
+     45            */
+     46          
+     47          #define AIRCR_VECTKEY_MASK    ((uint32_t)0x05FA0000)
+     48          /**
+     49            * @}
+     50            */
+     51          
+     52          /** @defgroup MISC_Private_Macros
+     53            * @{
+     54            */
+     55          
+     56          /**
+     57            * @}
+     58            */
+     59          
+     60          /** @defgroup MISC_Private_Variables
+     61            * @{
+     62            */
+     63          
+     64          /**
+     65            * @}
+     66            */
+     67          
+     68          /** @defgroup MISC_Private_FunctionPrototypes
+     69            * @{
+     70            */
+     71          
+     72          /**
+     73            * @}
+     74            */
+     75          
+     76          /** @defgroup MISC_Private_Functions
+     77            * @{
+     78            */
+     79          
+     80          /**
+     81            * @brief  Configures the priority grouping: pre-emption priority and subpriority.
+     82            * @param  NVIC_PriorityGroup: specifies the priority grouping bits length. 
+     83            *   This parameter can be one of the following values:
+     84            *     @arg NVIC_PriorityGroup_0: 0 bits for pre-emption priority
+     85            *                                4 bits for subpriority
+     86            *     @arg NVIC_PriorityGroup_1: 1 bits for pre-emption priority
+     87            *                                3 bits for subpriority
+     88            *     @arg NVIC_PriorityGroup_2: 2 bits for pre-emption priority
+     89            *                                2 bits for subpriority
+     90            *     @arg NVIC_PriorityGroup_3: 3 bits for pre-emption priority
+     91            *                                1 bits for subpriority
+     92            *     @arg NVIC_PriorityGroup_4: 4 bits for pre-emption priority
+     93            *                                0 bits for subpriority
+     94            * @retval None
+     95            */
+
+   \                                 In section .text, align 2, keep-with-next
+     96          void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)
+     97          {
+     98            /* Check the parameters */
+     99            //assert_param(IS_NVIC_PRIORITY_GROUP(NVIC_PriorityGroup));
+    100            
+    101            /* Set the PRIGROUP[10:8] bits according to NVIC_PriorityGroup value */
+    102            SCB->AIRCR = AIRCR_VECTKEY_MASK | NVIC_PriorityGroup;
+   \                     NVIC_PriorityGroupConfig: (+1)
+   \        0x0   0x....             LDR.N    R1,??DataTable4
+   \        0x2   0x4308             ORRS     R0,R1,R0
+   \        0x4   0x....             LDR.N    R1,??DataTable4_1
+   \        0x6   0x6008             STR      R0,[R1, #+0]
+    103          }
+   \        0x8   0x4770             BX       LR
+    104          
+    105          /**
+    106            * @brief  Initializes the NVIC peripheral according to the specified
+    107            *         parameters in the NVIC_InitStruct.
+    108            * @param  NVIC_InitStruct: pointer to a NVIC_InitTypeDef structure that contains
+    109            *         the configuration information for the specified NVIC peripheral.
+    110            * @retval None
+    111            */
+
+   \                                 In section .text, align 2, keep-with-next
+    112          void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
+    113          {
+    114            uint32_t tmppriority = 0x00, tmppre = 0x00, tmpsub = 0x0F;
+   \                     NVIC_Init: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+   \        0x2   0x2100             MOVS     R1,#+0
+   \        0x4   0x230F             MOVS     R3,#+15
+    115            
+    116            /* Check the parameters */
+    117            /*
+    118            assert_param(IS_FUNCTIONAL_STATE(NVIC_InitStruct->NVIC_IRQChannelCmd));
+    119            assert_param(IS_NVIC_PREEMPTION_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority));  
+    120            assert_param(IS_NVIC_SUB_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelSubPriority));
+    121            */
+    122            if (NVIC_InitStruct->NVIC_IRQChannelCmd != DISABLE)
+   \        0x6   0x78C1             LDRB     R1,[R0, #+3]
+   \        0x8   0x2900             CMP      R1,#+0
+   \        0xA   0xD01E             BEQ.N    ??NVIC_Init_0
+    123            {
+    124              /* Compute the Corresponding IRQ Priority --------------------------------*/    
+    125              tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700))>> 0x08;
+   \        0xC   0x....             LDR.N    R1,??DataTable4_1
+   \        0xE   0x6809             LDR      R1,[R1, #+0]
+   \       0x10   0xF411 0x61E0      ANDS     R1,R1,#0x700
+   \       0x14   0xF5D1 0x61E0      RSBS     R1,R1,#+1792
+   \       0x18   0x0A09             LSRS     R1,R1,#+8
+    126              tmppre = (0x4 - tmppriority);
+   \       0x1A   0xF1D1 0x0204      RSBS     R2,R1,#+4
+    127              tmpsub = tmpsub >> tmppriority;
+   \       0x1E   0x40CB             LSRS     R3,R3,R1
+    128          
+    129              tmppriority = (uint32_t)NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority << tmppre;
+   \       0x20   0x7841             LDRB     R1,[R0, #+1]
+   \       0x22   0xFA11 0xF202      LSLS     R2,R1,R2
+    130              tmppriority |=  NVIC_InitStruct->NVIC_IRQChannelSubPriority & tmpsub;
+   \       0x26   0x7881             LDRB     R1,[R0, #+2]
+   \       0x28   0x400B             ANDS     R3,R3,R1
+   \       0x2A   0x431A             ORRS     R2,R3,R2
+    131              tmppriority = tmppriority << 0x04;
+   \       0x2C   0x0112             LSLS     R2,R2,#+4
+    132                  
+    133              NVIC->IP[NVIC_InitStruct->NVIC_IRQChannel] = tmppriority;
+   \       0x2E   0x....             LDR.N    R1,??DataTable4_2
+   \       0x30   0x7803             LDRB     R3,[R0, #+0]
+   \       0x32   0x54CA             STRB     R2,[R1, R3]
+    134              
+    135              /* Enable the Selected IRQ Channels --------------------------------------*/
+    136              NVIC->ISER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+    137                (uint32_t)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (uint8_t)0x1F);
+   \       0x34   0x2101             MOVS     R1,#+1
+   \       0x36   0x7802             LDRB     R2,[R0, #+0]
+   \       0x38   0xF012 0x021F      ANDS     R2,R2,#0x1F
+   \       0x3C   0x4091             LSLS     R1,R1,R2
+   \       0x3E   0x....             LDR.N    R2,??DataTable4_3
+   \       0x40   0x7800             LDRB     R0,[R0, #+0]
+   \       0x42   0x1140             ASRS     R0,R0,#+5
+   \       0x44   0xF842 0x1020      STR      R1,[R2, R0, LSL #+2]
+   \       0x48   0xE009             B.N      ??NVIC_Init_1
+    138            }
+    139            else
+    140            {
+    141              /* Disable the Selected IRQ Channels -------------------------------------*/
+    142              NVIC->ICER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+    143                (uint32_t)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (uint8_t)0x1F);
+   \                     ??NVIC_Init_0: (+1)
+   \       0x4A   0x2101             MOVS     R1,#+1
+   \       0x4C   0x7802             LDRB     R2,[R0, #+0]
+   \       0x4E   0xF012 0x021F      ANDS     R2,R2,#0x1F
+   \       0x52   0x4091             LSLS     R1,R1,R2
+   \       0x54   0x....             LDR.N    R2,??DataTable4_4
+   \       0x56   0x7800             LDRB     R0,[R0, #+0]
+   \       0x58   0x1140             ASRS     R0,R0,#+5
+   \       0x5A   0xF842 0x1020      STR      R1,[R2, R0, LSL #+2]
+    144            }
+    145          }
+   \                     ??NVIC_Init_1: (+1)
+   \       0x5E   0x4770             BX       LR
+    146          
+    147          /**
+    148            * @brief  Sets the vector table location and Offset.
+    149            * @param  NVIC_VectTab: specifies if the vector table is in RAM or FLASH memory.
+    150            *   This parameter can be one of the following values:
+    151            *     @arg NVIC_VectTab_RAM
+    152            *     @arg NVIC_VectTab_FLASH
+    153            * @param  Offset: Vector Table base offset field. This value must be a multiple 
+    154            *         of 0x200.
+    155            * @retval None
+    156            */
+
+   \                                 In section .text, align 2, keep-with-next
+    157          void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
+    158          { 
+    159            /* Check the parameters */
+    160            //assert_param(IS_NVIC_VECTTAB(NVIC_VectTab));
+    161           // assert_param(IS_NVIC_OFFSET(Offset));
+    162             
+    163            SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
+   \                     NVIC_SetVectorTable: (+1)
+   \        0x0   0x....             LDR.N    R2,??DataTable4_5
+   \        0x2   0x4011             ANDS     R1,R2,R1
+   \        0x4   0x4308             ORRS     R0,R1,R0
+   \        0x6   0x....             LDR.N    R1,??DataTable4_6
+   \        0x8   0x6008             STR      R0,[R1, #+0]
+    164          }
+   \        0xA   0x4770             BX       LR
+    165          
+    166          /**
+    167            * @brief  Selects the condition for the system to enter low power mode.
+    168            * @param  LowPowerMode: Specifies the new mode for the system to enter low power mode.
+    169            *   This parameter can be one of the following values:
+    170            *     @arg NVIC_LP_SEVONPEND
+    171            *     @arg NVIC_LP_SLEEPDEEP
+    172            *     @arg NVIC_LP_SLEEPONEXIT
+    173            * @param  NewState: new state of LP condition. This parameter can be: ENABLE or DISABLE.
+    174            * @retval None
+    175            */
+
+   \                                 In section .text, align 2, keep-with-next
+    176          void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState)
+    177          {
+    178            /* Check the parameters */
+    179            //assert_param(IS_NVIC_LP(LowPowerMode));
+    180            //assert_param(IS_FUNCTIONAL_STATE(NewState));
+    181            
+    182            if (NewState != DISABLE)
+   \                     NVIC_SystemLPConfig: (+1)
+   \        0x0   0xB2C9             UXTB     R1,R1
+   \        0x2   0x2900             CMP      R1,#+0
+   \        0x4   0xD006             BEQ.N    ??NVIC_SystemLPConfig_0
+    183            {
+    184              SCB->SCR |= LowPowerMode;
+   \        0x6   0x....             LDR.N    R1,??DataTable4_7
+   \        0x8   0x6809             LDR      R1,[R1, #+0]
+   \        0xA   0xB2C0             UXTB     R0,R0
+   \        0xC   0x4308             ORRS     R0,R0,R1
+   \        0xE   0x....             LDR.N    R1,??DataTable4_7
+   \       0x10   0x6008             STR      R0,[R1, #+0]
+   \       0x12   0xE006             B.N      ??NVIC_SystemLPConfig_1
+    185            }
+    186            else
+    187            {
+    188              SCB->SCR &= (uint32_t)(~(uint32_t)LowPowerMode);
+   \                     ??NVIC_SystemLPConfig_0: (+1)
+   \       0x14   0x....             LDR.N    R1,??DataTable4_7
+   \       0x16   0x6809             LDR      R1,[R1, #+0]
+   \       0x18   0xB2C0             UXTB     R0,R0
+   \       0x1A   0xEA31 0x0000      BICS     R0,R1,R0
+   \       0x1E   0x....             LDR.N    R1,??DataTable4_7
+   \       0x20   0x6008             STR      R0,[R1, #+0]
+    189            }
+    190          }
+   \                     ??NVIC_SystemLPConfig_1: (+1)
+   \       0x22   0x4770             BX       LR
+    191          
+    192          /**
+    193            * @brief  Configures the SysTick clock source.
+    194            * @param  SysTick_CLKSource: specifies the SysTick clock source.
+    195            *   This parameter can be one of the following values:
+    196            *     @arg SysTick_CLKSource_HCLK_Div8: AHB clock divided by 8 selected as SysTick clock source.
+    197            *     @arg SysTick_CLKSource_HCLK: AHB clock selected as SysTick clock source.
+    198            * @retval None
+    199            */
+
+   \                                 In section .text, align 2, keep-with-next
+    200          void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource)
+    201          {
+    202            /* Check the parameters */
+    203            //assert_param(IS_SYSTICK_CLK_SOURCE(SysTick_CLKSource));
+    204            if (SysTick_CLKSource == SysTick_CLKSource_HCLK)
+   \                     SysTick_CLKSourceConfig: (+1)
+   \        0x0   0x2804             CMP      R0,#+4
+   \        0x2   0xD106             BNE.N    ??SysTick_CLKSourceConfig_0
+    205            {
+    206              SysTick->CTRL |= SysTick_CLKSource_HCLK;
+   \        0x4   0x....             LDR.N    R0,??DataTable4_8
+   \        0x6   0x6800             LDR      R0,[R0, #+0]
+   \        0x8   0xF050 0x0004      ORRS     R0,R0,#0x4
+   \        0xC   0x....             LDR.N    R1,??DataTable4_8
+   \        0xE   0x6008             STR      R0,[R1, #+0]
+   \       0x10   0xE005             B.N      ??SysTick_CLKSourceConfig_1
+    207            }
+    208            else
+    209            {
+    210              SysTick->CTRL &= SysTick_CLKSource_HCLK_Div8;
+   \                     ??SysTick_CLKSourceConfig_0: (+1)
+   \       0x12   0x....             LDR.N    R0,??DataTable4_8
+   \       0x14   0x6800             LDR      R0,[R0, #+0]
+   \       0x16   0xF030 0x0004      BICS     R0,R0,#0x4
+   \       0x1A   0x....             LDR.N    R1,??DataTable4_8
+   \       0x1C   0x6008             STR      R0,[R1, #+0]
+    211            }
+    212          }
+   \                     ??SysTick_CLKSourceConfig_1: (+1)
+   \       0x1E   0x4770             BX       LR
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4:
+   \        0x0   0x05FA'0000        DC32     0x5fa0000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_1:
+   \        0x0   0xE000'ED0C        DC32     0xe000ed0c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_2:
+   \        0x0   0xE000'E400        DC32     0xe000e400
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_3:
+   \        0x0   0xE000'E100        DC32     0xe000e100
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_4:
+   \        0x0   0xE000'E180        DC32     0xe000e180
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_5:
+   \        0x0   0x1FFF'FF80        DC32     0x1fffff80
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_6:
+   \        0x0   0xE000'ED08        DC32     0xe000ed08
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_7:
+   \        0x0   0xE000'ED10        DC32     0xe000ed10
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_8:
+   \        0x0   0xE000'E010        DC32     0xe000e010
+    213          
+    214          /**
+    215            * @}
+    216            */
+    217          
+    218          /**
+    219            * @}
+    220            */
+    221          
+    222          /**
+    223            * @}
+    224            */
+    225          
+    226          /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   NVIC_Init
+       0   NVIC_PriorityGroupConfig
+       0   NVIC_SetVectorTable
+       0   NVIC_SystemLPConfig
+       0   SysTick_CLKSourceConfig
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable4
+       4  ??DataTable4_1
+       4  ??DataTable4_2
+       4  ??DataTable4_3
+       4  ??DataTable4_4
+       4  ??DataTable4_5
+       4  ??DataTable4_6
+       4  ??DataTable4_7
+       4  ??DataTable4_8
+      96  NVIC_Init
+      10  NVIC_PriorityGroupConfig
+      12  NVIC_SetVectorTable
+      36  NVIC_SystemLPConfig
+      32  SysTick_CLKSourceConfig
+
+ 
+ 222 bytes in section .text
+ 
+ 222 bytes of CODE memory
+
+Errors: none
+Warnings: none

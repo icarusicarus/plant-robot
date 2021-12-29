@@ -1,0 +1,46 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.22.1.15669/W32 for ARM       22/Nov/2021  19:38:59
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        C:\Users\pnu3\Desktop\Embedded-main\Libraries\DHT11\DHT11.c
+#    Command line =  
+#        -f C:\Users\pnu3\AppData\Local\Temp\EW4EF9.tmp
+#        (C:\Users\pnu3\Desktop\Embedded-main\Libraries\DHT11\DHT11.c -D
+#        USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\pnu3\Desktop\Embedded-main\Debug\List -o
+#        C:\Users\pnu3\Desktop\Embedded-main\Debug\Obj --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --no_clustering --no_scheduling
+#        --debug --endian=little --cpu=Cortex-M3 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        C:\Users\pnu3\Desktop\Embedded-main\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I C:\Users\pnu3\Desktop\Embedded-main\Libraries\CMSIS\DeviceSupport\
+#        -I C:\Users\pnu3\Desktop\Embedded-main\Libraries\LCD\ -I
+#        C:\Users\pnu3\Desktop\Embedded-main\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\pnu3\Desktop\Embedded-main\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\pnu3\Desktop\Embedded-main\user\inc\ -I
+#        C:\Users\pnu3\Desktop\Embedded-main\user\ -I
+#        C:\Users\pnu3\Desktop\Embedded-main\Libraries\DHT11\ -Ol -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.0\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  C:\Users\pnu3\Desktop\Embedded-main\Debug\List\DHT11.lst
+#    Object file  =  C:\Users\pnu3\Desktop\Embedded-main\Debug\Obj\DHT11.o
+#
+###############################################################################
+
+
+
+ 
+
+ 
+
+
+Errors: none
+Warnings: none

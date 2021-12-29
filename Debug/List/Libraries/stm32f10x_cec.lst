@@ -1,0 +1,755 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V9.10.2.313/W64 for ARM         03/Nov/2021  18:48:25
+# Copyright 1999-2021 IAR Systems AB.
+#
+#    Cpu mode          =  thumb
+#    Endian            =  little
+#    Source file       =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\stm32f10x_cec.c
+#    Command line      =
+#        -f
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\stm32f10x_cec.o.rsp
+#        (C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\stm32f10x_cec.c
+#        -D USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\Libraries -o
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --no_clustering
+#        --no_scheduling --debug --endian=little --cpu=Cortex-M3 -e --fpu=None
+#        --dlib_config "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\inc\c\DLib_Config_Normal.h" -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\inc\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\user\ -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\CMSIS\DeviceSupport\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\juhyeonlee\Desktop\Embedded\Libraries\LCD\ -Ol -I
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.0\arm\CMSIS\Core\Include\\" -I "C:\Program Files\IAR
+#        Systems\Embedded Workbench 9.0\arm\CMSIS\DSP\Include\\")
+#        --dependencies=n
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\stm32f10x_cec.o.d
+#    Locale            =  C
+#    List file         =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\List\Libraries\stm32f10x_cec.lst
+#    Object file       =
+#        C:\Users\juhyeonlee\Desktop\Embedded\Debug\Obj\Libraries\stm32f10x_cec.o
+#    Runtime model:       
+#      __SystemLibrary =  DLib
+#      __dlib_version  =  6
+#      __size_limit    =  32768|ARM.EW.LINKER
+#
+###############################################################################
+
+C:\Users\juhyeonlee\Desktop\Embedded\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\stm32f10x_cec.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32f10x_cec.c
+      4            * @author  MCD Application Team
+      5            * @version V3.5.0
+      6            * @date    11-March-2011
+      7            * @brief   This file provides all the CEC firmware functions.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+     12            * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+     13            * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
+     14            * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+     15            * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+     16            * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     17            *
+     18            * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+     19            ******************************************************************************
+     20            */
+     21          
+     22          /* Includes ------------------------------------------------------------------*/
+     23          #include "stm32f10x_cec.h"
+     24          #include "stm32f10x_rcc.h"
+     25          
+     26          /** @addtogroup STM32F10x_StdPeriph_Driver
+     27            * @{
+     28            */
+     29          
+     30          /** @defgroup CEC 
+     31            * @brief CEC driver modules
+     32            * @{
+     33            */
+     34          
+     35          /** @defgroup CEC_Private_TypesDefinitions
+     36            * @{
+     37            */
+     38          
+     39          /**
+     40            * @}
+     41            */
+     42          
+     43          
+     44          /** @defgroup CEC_Private_Defines
+     45            * @{
+     46            */ 
+     47          
+     48          /* ------------ CEC registers bit address in the alias region ----------- */
+     49          #define CEC_OFFSET                (CEC_BASE - PERIPH_BASE)
+     50          
+     51          /* --- CFGR Register ---*/
+     52          
+     53          /* Alias word address of PE bit */
+     54          #define CFGR_OFFSET                 (CEC_OFFSET + 0x00)
+     55          #define PE_BitNumber                0x00
+     56          #define CFGR_PE_BB                  (PERIPH_BB_BASE + (CFGR_OFFSET * 32) + (PE_BitNumber * 4))
+     57          
+     58          /* Alias word address of IE bit */
+     59          #define IE_BitNumber                0x01
+     60          #define CFGR_IE_BB                  (PERIPH_BB_BASE + (CFGR_OFFSET * 32) + (IE_BitNumber * 4))
+     61          
+     62          /* --- CSR Register ---*/
+     63          
+     64          /* Alias word address of TSOM bit */
+     65          #define CSR_OFFSET                  (CEC_OFFSET + 0x10)
+     66          #define TSOM_BitNumber              0x00
+     67          #define CSR_TSOM_BB                 (PERIPH_BB_BASE + (CSR_OFFSET * 32) + (TSOM_BitNumber * 4))
+     68          
+     69          /* Alias word address of TEOM bit */
+     70          #define TEOM_BitNumber              0x01
+     71          #define CSR_TEOM_BB                 (PERIPH_BB_BASE + (CSR_OFFSET * 32) + (TEOM_BitNumber * 4))
+     72            
+     73          #define CFGR_CLEAR_Mask            (uint8_t)(0xF3)        /* CFGR register Mask */
+     74          #define FLAG_Mask                  ((uint32_t)0x00FFFFFF) /* CEC FLAG mask */
+     75           
+     76          /**
+     77            * @}
+     78            */ 
+     79          
+     80          
+     81          /** @defgroup CEC_Private_Macros
+     82            * @{
+     83            */ 
+     84          
+     85          /**
+     86            * @}
+     87            */ 
+     88          
+     89          
+     90          /** @defgroup CEC_Private_Variables
+     91            * @{
+     92            */ 
+     93          
+     94          /**
+     95            * @}
+     96            */ 
+     97          
+     98          
+     99          /** @defgroup CEC_Private_FunctionPrototypes
+    100            * @{
+    101            */
+    102           
+    103          /**
+    104            * @}
+    105            */ 
+    106          
+    107          
+    108          /** @defgroup CEC_Private_Functions
+    109            * @{
+    110            */ 
+    111          
+    112          /**
+    113            * @brief  Deinitializes the CEC peripheral registers to their default reset 
+    114            *         values.
+    115            * @param  None
+    116            * @retval None
+    117            */
+
+   \                                 In section .text, align 2, keep-with-next
+    118          void CEC_DeInit(void)
+    119          {
+   \                     CEC_DeInit: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    120            /* Enable CEC reset state */
+    121            RCC_APB1PeriphResetCmd(RCC_APB1Periph_CEC, ENABLE);  
+   \        0x2   0x2101             MOVS     R1,#+1
+   \        0x4   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \        0x8   0x.... 0x....      BL       RCC_APB1PeriphResetCmd
+    122            /* Release CEC from reset state */
+    123            RCC_APB1PeriphResetCmd(RCC_APB1Periph_CEC, DISABLE); 
+   \        0xC   0x2100             MOVS     R1,#+0
+   \        0xE   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \       0x12   0x.... 0x....      BL       RCC_APB1PeriphResetCmd
+    124          }
+   \       0x16   0xBD01             POP      {R0,PC}
+    125          
+    126          
+    127          /**
+    128            * @brief  Initializes the CEC peripheral according to the specified 
+    129            *         parameters in the CEC_InitStruct.
+    130            * @param  CEC_InitStruct: pointer to an CEC_InitTypeDef structure that
+    131            *         contains the configuration information for the specified
+    132            *         CEC peripheral.
+    133            * @retval None
+    134            */
+
+   \                                 In section .text, align 2, keep-with-next
+    135          void CEC_Init(CEC_InitTypeDef* CEC_InitStruct)
+    136          {
+    137            uint16_t tmpreg = 0;
+   \                     CEC_Init: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+    138           
+    139            /* Check the parameters */
+    140            //assert_param(IS_CEC_BIT_TIMING_ERROR_MODE(CEC_InitStruct->CEC_BitTimingMode));
+    141            //assert_param(IS_CEC_BIT_PERIOD_ERROR_MODE(CEC_InitStruct->CEC_BitPeriodMode));
+    142               
+    143            /*---------------------------- CEC CFGR Configuration -----------------*/
+    144            /* Get the CEC CFGR value */
+    145            tmpreg = CEC->CFGR;
+   \        0x2   0x....             LDR.N    R1,??DataTable13
+   \        0x4   0x680A             LDR      R2,[R1, #+0]
+    146            
+    147            /* Clear BTEM and BPEM bits */
+    148            tmpreg &= CFGR_CLEAR_Mask;
+   \        0x6   0xF012 0x02F3      ANDS     R2,R2,#0xF3
+    149            
+    150            /* Configure CEC: Bit Timing Error and Bit Period Error */
+    151            tmpreg |= (uint16_t)(CEC_InitStruct->CEC_BitTimingMode | CEC_InitStruct->CEC_BitPeriodMode);
+   \        0xA   0x8801             LDRH     R1,[R0, #+0]
+   \        0xC   0x430A             ORRS     R2,R1,R2
+   \        0xE   0x8840             LDRH     R0,[R0, #+2]
+   \       0x10   0x4302             ORRS     R2,R0,R2
+    152          
+    153            /* Write to CEC CFGR  register*/
+    154            CEC->CFGR = tmpreg;
+   \       0x12   0xB292             UXTH     R2,R2
+   \       0x14   0x....             LDR.N    R0,??DataTable13
+   \       0x16   0x6002             STR      R2,[R0, #+0]
+    155            
+    156          }
+   \       0x18   0x4770             BX       LR
+    157          
+    158          /**
+    159            * @brief  Enables or disables the specified CEC peripheral.
+    160            * @param  NewState: new state of the CEC peripheral. 
+    161            *     This parameter can be: ENABLE or DISABLE.
+    162            * @retval None
+    163            */
+
+   \                                 In section .text, align 2, keep-with-next
+    164          void CEC_Cmd(FunctionalState NewState)
+    165          {
+    166            /* Check the parameters */
+    167            //assert_param(IS_FUNCTIONAL_STATE(NewState));
+    168          
+    169            *(__IO uint32_t *) CFGR_PE_BB = (uint32_t)NewState;
+   \                     CEC_Cmd: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+   \        0x2   0xB2C9             UXTB     R1,R1
+   \        0x4   0x....             LDR.N    R2,??DataTable13_1
+   \        0x6   0x6011             STR      R1,[R2, #+0]
+    170          
+    171            if(NewState == DISABLE)
+   \        0x8   0xB2C0             UXTB     R0,R0
+   \        0xA   0x2800             CMP      R0,#+0
+   \        0xC   0xD103             BNE.N    ??CEC_Cmd_0
+    172            {
+    173              /* Wait until the PE bit is cleared by hardware (Idle Line detected) */
+    174              while((CEC->CFGR & CEC_CFGR_PE) != (uint32_t)RESET)
+   \                     ??CEC_Cmd_1: (+1)
+   \        0xE   0x....             LDR.N    R0,??DataTable13
+   \       0x10   0x6800             LDR      R0,[R0, #+0]
+   \       0x12   0x07C0             LSLS     R0,R0,#+31
+   \       0x14   0xD4FB             BMI.N    ??CEC_Cmd_1
+    175              {
+    176              }  
+    177            }  
+    178          }
+   \                     ??CEC_Cmd_0: (+1)
+   \       0x16   0x4770             BX       LR
+    179          
+    180          /**
+    181            * @brief  Enables or disables the CEC interrupt.
+    182            * @param  NewState: new state of the CEC interrupt.
+    183            *   This parameter can be: ENABLE or DISABLE.
+    184            * @retval None
+    185            */
+
+   \                                 In section .text, align 2, keep-with-next
+    186          void CEC_ITConfig(FunctionalState NewState)
+    187          {
+    188            /* Check the parameters */
+    189            //assert_param(IS_FUNCTIONAL_STATE(NewState));
+    190          
+    191            *(__IO uint32_t *) CFGR_IE_BB = (uint32_t)NewState;
+   \                     CEC_ITConfig: (+1)
+   \        0x0   0xB2C0             UXTB     R0,R0
+   \        0x2   0x....             LDR.N    R1,??DataTable13_2
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    192          }
+   \        0x6   0x4770             BX       LR
+    193          
+    194          /**
+    195            * @brief  Defines the Own Address of the CEC device.
+    196            * @param  CEC_OwnAddress: The CEC own address
+    197            * @retval None
+    198            */
+
+   \                                 In section .text, align 2, keep-with-next
+    199          void CEC_OwnAddressConfig(uint8_t CEC_OwnAddress)
+    200          {
+    201            /* Check the parameters */
+    202            //assert_param(IS_CEC_ADDRESS(CEC_OwnAddress));
+    203          
+    204            /* Set the CEC own address */
+    205            CEC->OAR = CEC_OwnAddress;
+   \                     CEC_OwnAddressConfig: (+1)
+   \        0x0   0xB2C0             UXTB     R0,R0
+   \        0x2   0x....             LDR.N    R1,??DataTable13_3
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    206          }
+   \        0x6   0x4770             BX       LR
+    207          
+    208          /**
+    209            * @brief  Sets the CEC prescaler value.
+    210            * @param  CEC_Prescaler: CEC prescaler new value
+    211            * @retval None
+    212            */
+
+   \                                 In section .text, align 2, keep-with-next
+    213          void CEC_SetPrescaler(uint16_t CEC_Prescaler)
+    214          {
+    215            /* Check the parameters */
+    216            //assert_param(IS_CEC_PRESCALER(CEC_Prescaler));
+    217          
+    218            /* Set the  Prescaler value*/
+    219            CEC->PRES = CEC_Prescaler;
+   \                     CEC_SetPrescaler: (+1)
+   \        0x0   0xB280             UXTH     R0,R0
+   \        0x2   0x....             LDR.N    R1,??DataTable13_4
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    220          }
+   \        0x6   0x4770             BX       LR
+    221          
+    222          /**
+    223            * @brief  Transmits single data through the CEC peripheral.
+    224            * @param  Data: the data to transmit.
+    225            * @retval None
+    226            */
+
+   \                                 In section .text, align 2, keep-with-next
+    227          void CEC_SendDataByte(uint8_t Data)
+    228          {  
+    229            /* Transmit Data */
+    230            CEC->TXD = Data ;
+   \                     CEC_SendDataByte: (+1)
+   \        0x0   0xB2C0             UXTB     R0,R0
+   \        0x2   0x....             LDR.N    R1,??DataTable13_5
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    231          }
+   \        0x6   0x4770             BX       LR
+    232          
+    233          
+    234          /**
+    235            * @brief  Returns the most recent received data by the CEC peripheral.
+    236            * @param  None
+    237            * @retval The received data.
+    238            */
+
+   \                                 In section .text, align 2, keep-with-next
+    239          uint8_t CEC_ReceiveDataByte(void)
+    240          {
+    241            /* Receive Data */
+    242            return (uint8_t)(CEC->RXD);
+   \                     CEC_ReceiveDataByte: (+1)
+   \        0x0   0x....             LDR.N    R0,??DataTable13_6
+   \        0x2   0x6800             LDR      R0,[R0, #+0]
+   \        0x4   0xB2C0             UXTB     R0,R0
+   \        0x6   0x4770             BX       LR
+    243          }
+    244          
+    245          /**
+    246            * @brief  Starts a new message.
+    247            * @param  None
+    248            * @retval None
+    249            */
+
+   \                                 In section .text, align 2, keep-with-next
+    250          void CEC_StartOfMessage(void)
+    251          {  
+    252            /* Starts of new message */
+    253            *(__IO uint32_t *) CSR_TSOM_BB = (uint32_t)0x1;
+   \                     CEC_StartOfMessage: (+1)
+   \        0x0   0x2001             MOVS     R0,#+1
+   \        0x2   0x....             LDR.N    R1,??DataTable13_7
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    254          }
+   \        0x6   0x4770             BX       LR
+    255          
+    256          /**
+    257            * @brief  Transmits message with or without an EOM bit.
+    258            * @param  NewState: new state of the CEC Tx End Of Message. 
+    259            *     This parameter can be: ENABLE or DISABLE.
+    260            * @retval None
+    261            */
+
+   \                                 In section .text, align 2, keep-with-next
+    262          void CEC_EndOfMessageCmd(FunctionalState NewState)
+    263          {   
+    264            /* Check the parameters */
+    265            //assert_param(IS_FUNCTIONAL_STATE(NewState));
+    266            
+    267            /* The data byte will be transmitted with or without an EOM bit*/
+    268            *(__IO uint32_t *) CSR_TEOM_BB = (uint32_t)NewState;
+   \                     CEC_EndOfMessageCmd: (+1)
+   \        0x0   0xB2C0             UXTB     R0,R0
+   \        0x2   0x....             LDR.N    R1,??DataTable13_8
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    269          }
+   \        0x6   0x4770             BX       LR
+    270          
+    271          /**
+    272            * @brief  Gets the CEC flag status
+    273            * @param  CEC_FLAG: specifies the CEC flag to check. 
+    274            *   This parameter can be one of the following values:
+    275            *     @arg CEC_FLAG_BTE: Bit Timing Error
+    276            *     @arg CEC_FLAG_BPE: Bit Period Error
+    277            *     @arg CEC_FLAG_RBTFE: Rx Block Transfer Finished Error
+    278            *     @arg CEC_FLAG_SBE: Start Bit Error
+    279            *     @arg CEC_FLAG_ACKE: Block Acknowledge Error
+    280            *     @arg CEC_FLAG_LINE: Line Error
+    281            *     @arg CEC_FLAG_TBTFE: Tx Block Transfer Finished Error
+    282            *     @arg CEC_FLAG_TEOM: Tx End Of Message 
+    283            *     @arg CEC_FLAG_TERR: Tx Error
+    284            *     @arg CEC_FLAG_TBTRF: Tx Byte Transfer Request or Block Transfer Finished
+    285            *     @arg CEC_FLAG_RSOM: Rx Start Of Message
+    286            *     @arg CEC_FLAG_REOM: Rx End Of Message
+    287            *     @arg CEC_FLAG_RERR: Rx Error
+    288            *     @arg CEC_FLAG_RBTF: Rx Byte/Block Transfer Finished
+    289            * @retval The new state of CEC_FLAG (SET or RESET)
+    290            */
+
+   \                                 In section .text, align 2, keep-with-next
+    291          FlagStatus CEC_GetFlagStatus(uint32_t CEC_FLAG) 
+    292          {
+    293            FlagStatus bitstatus = RESET;
+   \                     CEC_GetFlagStatus: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+    294            uint32_t cecreg = 0, cecbase = 0;
+   \        0x2   0x2100             MOVS     R1,#+0
+   \        0x4   0x2100             MOVS     R1,#+0
+    295            
+    296            /* Check the parameters */
+    297            //assert_param(IS_CEC_GET_FLAG(CEC_FLAG));
+    298           
+    299            /* Get the CEC peripheral base address */
+    300            cecbase = (uint32_t)(CEC_BASE);
+   \        0x6   0x....             LDR.N    R2,??DataTable13
+    301            
+    302            /* Read flag register index */
+    303            cecreg = CEC_FLAG >> 28;
+   \        0x8   0x0001             MOVS     R1,R0
+   \        0xA   0x0F09             LSRS     R1,R1,#+28
+    304            
+    305            /* Get bit[23:0] of the flag */
+    306            CEC_FLAG &= FLAG_Mask;
+   \        0xC   0xF020 0x407F      BIC      R0,R0,#0xFF000000
+    307            
+    308            if(cecreg != 0)
+   \       0x10   0x2900             CMP      R1,#+0
+   \       0x12   0xD002             BEQ.N    ??CEC_GetFlagStatus_0
+    309            {
+    310              /* Flag in CEC ESR Register */
+    311              CEC_FLAG = (uint32_t)(CEC_FLAG >> 16);
+   \       0x14   0x0C00             LSRS     R0,R0,#+16
+    312              
+    313              /* Get the CEC ESR register address */
+    314              cecbase += 0xC;
+   \       0x16   0x320C             ADDS     R2,R2,#+12
+   \       0x18   0xE000             B.N      ??CEC_GetFlagStatus_1
+    315            }
+    316            else
+    317            {
+    318              /* Get the CEC CSR register address */
+    319              cecbase += 0x10;
+   \                     ??CEC_GetFlagStatus_0: (+1)
+   \       0x1A   0x3210             ADDS     R2,R2,#+16
+    320            }
+    321            
+    322            if(((*(__IO uint32_t *)cecbase) & CEC_FLAG) != (uint32_t)RESET)
+   \                     ??CEC_GetFlagStatus_1: (+1)
+   \       0x1C   0x6811             LDR      R1,[R2, #+0]
+   \       0x1E   0x4201             TST      R1,R0
+   \       0x20   0xD001             BEQ.N    ??CEC_GetFlagStatus_2
+    323            {
+    324              /* CEC_FLAG is set */
+    325              bitstatus = SET;
+   \       0x22   0x2001             MOVS     R0,#+1
+   \       0x24   0xE000             B.N      ??CEC_GetFlagStatus_3
+    326            }
+    327            else
+    328            {
+    329              /* CEC_FLAG is reset */
+    330              bitstatus = RESET;
+   \                     ??CEC_GetFlagStatus_2: (+1)
+   \       0x26   0x2000             MOVS     R0,#+0
+    331            }
+    332            
+    333            /* Return the CEC_FLAG status */
+    334            return  bitstatus;
+   \                     ??CEC_GetFlagStatus_3: (+1)
+   \       0x28   0xB2C0             UXTB     R0,R0
+   \       0x2A   0x4770             BX       LR
+    335          }
+    336          
+    337          /**
+    338            * @brief  Clears the CEC's pending flags.
+    339            * @param  CEC_FLAG: specifies the flag to clear. 
+    340            *   This parameter can be any combination of the following values:
+    341            *     @arg CEC_FLAG_TERR: Tx Error
+    342            *     @arg CEC_FLAG_TBTRF: Tx Byte Transfer Request or Block Transfer Finished
+    343            *     @arg CEC_FLAG_RSOM: Rx Start Of Message
+    344            *     @arg CEC_FLAG_REOM: Rx End Of Message
+    345            *     @arg CEC_FLAG_RERR: Rx Error
+    346            *     @arg CEC_FLAG_RBTF: Rx Byte/Block Transfer Finished
+    347            * @retval None
+    348            */
+
+   \                                 In section .text, align 2, keep-with-next
+    349          void CEC_ClearFlag(uint32_t CEC_FLAG)
+    350          { 
+    351            uint32_t tmp = 0x0;
+   \                     CEC_ClearFlag: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+    352            
+    353            /* Check the parameters */
+    354            //assert_param(IS_CEC_CLEAR_FLAG(CEC_FLAG));
+    355          
+    356            tmp = CEC->CSR & 0x2;
+   \        0x2   0x....             LDR.N    R1,??DataTable13_9
+   \        0x4   0x6809             LDR      R1,[R1, #+0]
+   \        0x6   0xF011 0x0102      ANDS     R1,R1,#0x2
+    357                 
+    358            /* Clear the selected CEC flags */
+    359            CEC->CSR &= (uint32_t)(((~(uint32_t)CEC_FLAG) & 0xFFFFFFFC) | tmp);
+   \        0xA   0x....             LDR.N    R2,??DataTable13_9
+   \        0xC   0x6812             LDR      R2,[R2, #+0]
+   \        0xE   0x43C0             MVNS     R0,R0
+   \       0x10   0x0880             LSRS     R0,R0,#+2
+   \       0x12   0x0080             LSLS     R0,R0,#+2
+   \       0x14   0x4308             ORRS     R0,R1,R0
+   \       0x16   0x4010             ANDS     R0,R0,R2
+   \       0x18   0x....             LDR.N    R1,??DataTable13_9
+   \       0x1A   0x6008             STR      R0,[R1, #+0]
+    360          }
+   \       0x1C   0x4770             BX       LR
+    361          
+    362          /**
+    363            * @brief  Checks whether the specified CEC interrupt has occurred or not.
+    364            * @param  CEC_IT: specifies the CEC interrupt source to check. 
+    365            *   This parameter can be one of the following values:
+    366            *     @arg CEC_IT_TERR: Tx Error
+    367            *     @arg CEC_IT_TBTF: Tx Block Transfer Finished
+    368            *     @arg CEC_IT_RERR: Rx Error
+    369            *     @arg CEC_IT_RBTF: Rx Block Transfer Finished
+    370            * @retval The new state of CEC_IT (SET or RESET).
+    371            */
+
+   \                                 In section .text, align 2, keep-with-next
+    372          ITStatus CEC_GetITStatus(uint8_t CEC_IT)
+    373          {
+    374            ITStatus bitstatus = RESET;
+   \                     CEC_GetITStatus: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+    375            uint32_t enablestatus = 0;
+   \        0x2   0x2100             MOVS     R1,#+0
+    376            
+    377            /* Check the parameters */
+    378             //assert_param(IS_CEC_GET_IT(CEC_IT));
+    379             
+    380            /* Get the CEC IT enable bit status */
+    381            enablestatus = (CEC->CFGR & (uint8_t)CEC_CFGR_IE) ;
+   \        0x4   0x....             LDR.N    R1,??DataTable13
+   \        0x6   0x6809             LDR      R1,[R1, #+0]
+   \        0x8   0xF011 0x0102      ANDS     R1,R1,#0x2
+    382            
+    383            /* Check the status of the specified CEC interrupt */
+    384            if (((CEC->CSR & CEC_IT) != (uint32_t)RESET) && enablestatus)
+   \        0xC   0x....             LDR.N    R2,??DataTable13_9
+   \        0xE   0x6812             LDR      R2,[R2, #+0]
+   \       0x10   0xB2C0             UXTB     R0,R0
+   \       0x12   0x4202             TST      R2,R0
+   \       0x14   0xD003             BEQ.N    ??CEC_GetITStatus_0
+   \       0x16   0x2900             CMP      R1,#+0
+   \       0x18   0xD001             BEQ.N    ??CEC_GetITStatus_0
+    385            {
+    386              /* CEC_IT is set */
+    387              bitstatus = SET;
+   \       0x1A   0x2001             MOVS     R0,#+1
+   \       0x1C   0xE000             B.N      ??CEC_GetITStatus_1
+    388            }
+    389            else
+    390            {
+    391              /* CEC_IT is reset */
+    392              bitstatus = RESET;
+   \                     ??CEC_GetITStatus_0: (+1)
+   \       0x1E   0x2000             MOVS     R0,#+0
+    393            }
+    394            /* Return the CEC_IT status */
+    395            return  bitstatus;
+   \                     ??CEC_GetITStatus_1: (+1)
+   \       0x20   0xB2C0             UXTB     R0,R0
+   \       0x22   0x4770             BX       LR
+    396          }
+    397          
+    398          /**
+    399            * @brief  Clears the CEC's interrupt pending bits.
+    400            * @param  CEC_IT: specifies the CEC interrupt pending bit to clear.
+    401            *   This parameter can be any combination of the following values:
+    402            *     @arg CEC_IT_TERR: Tx Error
+    403            *     @arg CEC_IT_TBTF: Tx Block Transfer Finished
+    404            *     @arg CEC_IT_RERR: Rx Error
+    405            *     @arg CEC_IT_RBTF: Rx Block Transfer Finished
+    406            * @retval None
+    407            */
+
+   \                                 In section .text, align 2, keep-with-next
+    408          void CEC_ClearITPendingBit(uint16_t CEC_IT)
+    409          {
+    410            uint32_t tmp = 0x0;
+   \                     CEC_ClearITPendingBit: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+    411            
+    412            /* Check the parameters */
+    413            //assert_param(IS_CEC_GET_IT(CEC_IT));
+    414            
+    415            tmp = CEC->CSR & 0x2;
+   \        0x2   0x....             LDR.N    R1,??DataTable13_9
+   \        0x4   0x6809             LDR      R1,[R1, #+0]
+   \        0x6   0xF011 0x0102      ANDS     R1,R1,#0x2
+    416            
+    417            /* Clear the selected CEC interrupt pending bits */
+    418            CEC->CSR &= (uint32_t)(((~(uint32_t)CEC_IT) & 0xFFFFFFFC) | tmp);
+   \        0xA   0x....             LDR.N    R2,??DataTable13_9
+   \        0xC   0x6812             LDR      R2,[R2, #+0]
+   \        0xE   0xB280             UXTH     R0,R0
+   \       0x10   0x43C0             MVNS     R0,R0
+   \       0x12   0x0880             LSRS     R0,R0,#+2
+   \       0x14   0x0080             LSLS     R0,R0,#+2
+   \       0x16   0x4308             ORRS     R0,R1,R0
+   \       0x18   0x4010             ANDS     R0,R0,R2
+   \       0x1A   0x....             LDR.N    R1,??DataTable13_9
+   \       0x1C   0x6008             STR      R0,[R1, #+0]
+    419          }
+   \       0x1E   0x4770             BX       LR
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13:
+   \        0x0   0x4000'7800        DC32     0x40007800
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_1:
+   \        0x0   0x420F'0000        DC32     0x420f0000
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_2:
+   \        0x0   0x420F'0004        DC32     0x420f0004
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_3:
+   \        0x0   0x4000'7804        DC32     0x40007804
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_4:
+   \        0x0   0x4000'7808        DC32     0x40007808
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_5:
+   \        0x0   0x4000'7814        DC32     0x40007814
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_6:
+   \        0x0   0x4000'7818        DC32     0x40007818
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_7:
+   \        0x0   0x420F'0200        DC32     0x420f0200
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_8:
+   \        0x0   0x420F'0204        DC32     0x420f0204
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13_9:
+   \        0x0   0x4000'7810        DC32     0x40007810
+    420          
+    421          /**
+    422            * @}
+    423            */ 
+    424          
+    425          /**
+    426            * @}
+    427            */ 
+    428          
+    429          /**
+    430            * @}
+    431            */ 
+    432          
+    433          /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   CEC_ClearFlag
+       0   CEC_ClearITPendingBit
+       0   CEC_Cmd
+       8   CEC_DeInit
+         8   -> RCC_APB1PeriphResetCmd
+       0   CEC_EndOfMessageCmd
+       0   CEC_GetFlagStatus
+       0   CEC_GetITStatus
+       0   CEC_ITConfig
+       0   CEC_Init
+       0   CEC_OwnAddressConfig
+       0   CEC_ReceiveDataByte
+       0   CEC_SendDataByte
+       0   CEC_SetPrescaler
+       0   CEC_StartOfMessage
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable13
+       4  ??DataTable13_1
+       4  ??DataTable13_2
+       4  ??DataTable13_3
+       4  ??DataTable13_4
+       4  ??DataTable13_5
+       4  ??DataTable13_6
+       4  ??DataTable13_7
+       4  ??DataTable13_8
+       4  ??DataTable13_9
+      30  CEC_ClearFlag
+      32  CEC_ClearITPendingBit
+      24  CEC_Cmd
+      24  CEC_DeInit
+       8  CEC_EndOfMessageCmd
+      44  CEC_GetFlagStatus
+      36  CEC_GetITStatus
+       8  CEC_ITConfig
+      26  CEC_Init
+       8  CEC_OwnAddressConfig
+       8  CEC_ReceiveDataByte
+       8  CEC_SendDataByte
+       8  CEC_SetPrescaler
+       8  CEC_StartOfMessage
+
+ 
+ 312 bytes in section .text
+ 
+ 312 bytes of CODE memory
+
+Errors: none
+Warnings: none
